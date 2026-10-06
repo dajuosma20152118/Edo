@@ -1,3 +1,15 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1E4C93">
+<meta name="description" content="Ruta señalizada desde la Plaça Major de Castelló hasta la Ermita de la Magdalena, con 11 placas de punto de paso.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Magdalena">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>Camí de la Magdalena</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,6 +36,7 @@
   --plaque-bg: #1E4C93;
   --plaque-fg: #FFFFFF;
   --plaque-edge: #163A72;
+  --you: #D23C6A;
 
   --f-display: "Alegreya", "Iowan Old Style", Georgia, serif;
   --f-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
@@ -33,19 +46,23 @@
   :root:not([data-theme="light"]) {
     --ground: #111721; --surface: #18202C; --ink: #E6EBF1; --muted: #9AA5B5; --line: #2A3442;
     --land: #1A222D; --town: #232C38; --water: #3F6E94; --road: #3A4350;
-    --accent: #7FA8EA; --accent-ink: #0E1520; --shell: #F2C230; --ribbon: #45AE68; --halo: #111721;
+    --accent: #7FA8EA; --accent-ink: #0E1520; --you: #FF6F9C; --shell: #F2C230; --ribbon: #45AE68; --halo: #111721;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --ground: #111721; --surface: #18202C; --ink: #E6EBF1; --muted: #9AA5B5; --line: #2A3442;
   --land: #1A222D; --town: #232C38; --water: #3F6E94; --road: #3A4350;
-  --accent: #7FA8EA; --accent-ink: #0E1520; --shell: #F2C230; --ribbon: #45AE68; --halo: #111721;
+  --accent: #7FA8EA; --accent-ink: #0E1520; --you: #FF6F9C; --shell: #F2C230; --ribbon: #45AE68; --halo: #111721;
   color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+[hidden] { display: none !important; }
+img { max-width: 100%; }
 body {
+  margin: 0;
   background: var(--ground); color: var(--ink);
   font: 17px/1.55 var(--f-body);
   padding-inline: 16px; padding-block: 28px 56px;
@@ -81,6 +98,9 @@ header { display: grid; gap: 18px; }
 .map-frame { background: var(--land); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
 #map { display: block; width: 100%; height: auto; max-height: calc(100vh - 80px); }
 .map-note { font-size: .82rem; color: var(--muted); }
+.geo { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.geo .btn { cursor: pointer; }
+.geo-msg { font-size: .92rem; color: var(--ink); min-width: 0; flex: 1 1 220px; }
 
 .side { display: grid; gap: 24px; min-width: 0; }
 .plaque-stage { display: grid; grid-template-columns: minmax(0, 250px) minmax(0, 1fr); gap: 22px; align-items: start; }
@@ -172,6 +192,8 @@ header { display: grid; gap: 18px; }
   .stop button { grid-template-columns: 40px minmax(0, 1fr) auto; gap: 10px; }
 }
 </style>
+</head>
+<body>
 
 <div class="wrap">
   <header>
@@ -189,6 +211,10 @@ header { display: grid; gap: 18px; }
     <div class="map-col">
       <div class="map-frame"><svg id="map" role="img" aria-label="Mapa esquemático del recorrido desde la Plaça Major hasta la Ermita de la Magdalena"></svg></div>
       <p class="map-note">Trazado esquemático a escala aproximada: los kilómetros se miden sobre esta línea simplificada (el recorrido real ronda los 6,5 km). Toca un número para ver su placa.</p>
+      <div class="geo">
+        <button type="button" class="btn ghost" id="geo-btn">Mostrar mi posición</button>
+        <p class="geo-msg" id="geo-msg" aria-live="polite"></p>
+      </div>
     </div>
 
     <div class="side">
@@ -508,4 +534,56 @@ select(7, false);
 
 // Concha pequeña para la ficha
 document.getElementById("mini-shell").innerHTML = `<g transform="translate(12 10) scale(.4)">${shellSVG("#F6E3B0", 50, 84, 60, 7)}</g>`;
+// ---------- Posición del usuario ----------
+const geoBtn = document.getElementById("geo-btn"), geoMsg = document.getElementById("geo-msg");
+function youMarker() {
+  const g = el("g", {}, svg);
+  g.style.display = "none";
+  el("circle", { r: 18, fill: "var(--you)", opacity: .22 }, g);
+  el("circle", { r: 8, fill: "var(--you)", stroke: "#fff", "stroke-width": 3 }, g);
+  return g;
+}
+const youMain = youMarker(), youInset = youMarker();
+function put(g, on, xy) {
+  g.style.display = on ? "" : "none";
+  if (on) g.setAttribute("transform", `translate(${xy[0].toFixed(1)} ${xy[1].toFixed(1)})`);
+}
+const dist = m => m < 1000 ? `${Math.round(m / 10) * 10} m` : `${fmt(m / 1000)} km`;
+let watchId = null, firstFix = true;
+function onPos(p) {
+  const ll = [p.coords.latitude, p.coords.longitude];
+  let best = 0, bd = Infinity;
+  STOPS.forEach((s, i) => { const d = hav(ll, s.ll); if (d < bd) { bd = d; best = i; } });
+  put(youMain, ll[0] > LAT0 && ll[0] < LAT1 && ll[1] > LON0 && ll[1] < LON1, px(ll));
+  put(youInset, ll[0] > IN.lat0 && ll[0] < IN.lat1 && ll[1] > IN.lon0 && ll[1] < IN.lon1, ipx(ll));
+  const s = STOPS[best], name = `fita ${pad(best + 1)} · ${s.plate}`;
+  geoMsg.textContent = bd < 120 ? `Estás en la ${name}.`
+    : bd > 3000 ? `Estás a ${dist(bd)} de la ruta. Lo más cerca es la ${name}.`
+    : `Estás a ${dist(bd)} de la ${name}.`;
+  if (firstFix) { firstFix = false; select(best, false); }
+}
+function stopGeo(msg) {
+  if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+  watchId = null; firstFix = true;
+  put(youMain, false); put(youInset, false);
+  geoBtn.textContent = "Mostrar mi posición";
+  geoMsg.textContent = msg || "";
+}
+geoBtn.addEventListener("click", () => {
+  if (watchId !== null) return stopGeo();
+  if (!navigator.geolocation) return stopGeo("Este navegador no permite ver tu posición.");
+  geoMsg.textContent = "Buscando tu posición…";
+  geoBtn.textContent = "Dejar de seguir mi posición";
+  watchId = navigator.geolocation.watchPosition(onPos, e => stopGeo(e.code === 1
+      ? "Sin permiso de ubicación. Actívalo en los ajustes del teléfono para ver dónde estás."
+      : "No se ha podido obtener tu posición. Prueba al aire libre."),
+    { enableHighAccuracy: true, maximumAge: 10000, timeout: 30000 });
+});
+
+// Funciona sin conexión cuando se sirve por https (PWA)
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
 </script>
+</body>
+</html>

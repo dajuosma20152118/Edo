@@ -1,0 +1,17 @@
+{
+  "name": "Camí de la Magdalena",
+  "short_name": "Magdalena",
+  "description": "Ruta señalizada desde la Plaça Major de Castelló hasta la Ermita de la Magdalena.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F2F4F1",
+  "theme_color": "#1E4C93",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

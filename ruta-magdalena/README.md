@@ -4,6 +4,15 @@ Ruta señalizada al estilo del Camino de Santiago desde la **Plaça Major (Ajunt
 
 - `index.html`: mapa del recorrido, las 11 placas de punto de paso (fites) y la ficha técnica de la placa.
 - `ruta.gpx`: trazado y puntos de paso para cargar en una app de GPS (Wikiloc, OsmAnd, Google My Maps…).
+- `manifest.webmanifest`, `sw.js`, `icons/`: la convierten en app instalable que funciona sin conexión.
+
+## Descargar la app
+
+**Android:** en la página [Releases](../../releases/tag/app-android) del repositorio descarga `camino-magdalena.apk` desde el móvil y ábrela. La primera vez Android pide permiso para instalar apps de origen desconocido. La APK se compila sola con GitHub Actions (`.github/workflows/android.yml`) cada vez que cambia la ruta o el proyecto `android/`.
+
+**iPhone (y también Android):** publica el repositorio con GitHub Pages (*Settings → Pages → Deploy from a branch → main / root*), abre `https://<usuario>.github.io/<repo>/ruta-magdalena/` en Safari y pulsa *Compartir → Añadir a pantalla de inicio*. Queda como app con icono y funciona sin cobertura.
+
+Dentro de la app, el botón **Mostrar mi posición** sitúa al caminante en el mapa y le dice a qué distancia está de la fita más cercana.
 
 | Fita | Punto de paso | Tipo |
 |---|---|---|

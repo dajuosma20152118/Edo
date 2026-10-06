@@ -1,0 +1,44 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'es.edo.caminomagdalena'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'es.edo.caminomagdalena'
+        minSdk 24
+        targetSdk 34
+        // En GitHub Actions cada compilación lleva un número mayor para poder actualizar la app
+        versionCode Integer.parseInt(System.getenv('VERSION_CODE') ?: '1')
+        versionName '1.0'
+    }
+
+    // Clave de depuración fija en el repositorio: así una APK nueva se instala encima de la anterior
+    signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    // La app empaqueta la misma web que hay en ruta-magdalena/
+    sourceSets {
+        main {
+            assets.srcDirs = ['../../ruta-magdalena']
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
