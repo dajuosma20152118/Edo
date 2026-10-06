@@ -1,0 +1,511 @@
+<title>Camí de la Magdalena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;1,500&family=Alegreya+Sans:wght@400;500;700&family=Overpass:wght@500;700;800&display=swap">
+<style>
+/* Layout: guía de peregrino. Cabecera sobria, mapa del trazado a la izquierda (fijo en escritorio),
+   placa grande + lista de fitas a la derecha; debajo, la ficha técnica de la placa. */
+:root {
+  --ground: #F2F4F1;
+  --surface: #FFFFFF;
+  --ink: #1B2331;
+  --muted: #5A6476;
+  --line: #D3D9DE;
+  --land: #E6EADF;
+  --town: #DCDFD8;
+  --water: #7FAED3;
+  --road: #B9BDB4;
+  --accent: #1E4C93;
+  --accent-ink: #FFFFFF;
+  --shell: #F2C230;
+  --ribbon: #2E8B4E;
+  --halo: #F2F4F1;
+  /* La placa es un objeto físico: mismos colores en ambos temas */
+  --plaque-bg: #1E4C93;
+  --plaque-fg: #FFFFFF;
+  --plaque-edge: #163A72;
+
+  --f-display: "Alegreya", "Iowan Old Style", Georgia, serif;
+  --f-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --f-sign: "Overpass", "Highway Gothic", "Arial Narrow", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #111721; --surface: #18202C; --ink: #E6EBF1; --muted: #9AA5B5; --line: #2A3442;
+    --land: #1A222D; --town: #232C38; --water: #3F6E94; --road: #3A4350;
+    --accent: #7FA8EA; --accent-ink: #0E1520; --shell: #F2C230; --ribbon: #45AE68; --halo: #111721;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #111721; --surface: #18202C; --ink: #E6EBF1; --muted: #9AA5B5; --line: #2A3442;
+  --land: #1A222D; --town: #232C38; --water: #3F6E94; --road: #3A4350;
+  --accent: #7FA8EA; --accent-ink: #0E1520; --shell: #F2C230; --ribbon: #45AE68; --halo: #111721;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--ground); color: var(--ink);
+  font: 17px/1.55 var(--f-body);
+  padding-inline: 16px; padding-block: 28px 56px;
+}
+.wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 40px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.12; }
+h1 { font-size: clamp(2.1rem, 5vw, 3.3rem); font-weight: 700; }
+h2 { font-size: 1.7rem; font-weight: 700; }
+h3 { font-size: 1.2rem; font-weight: 700; }
+p { margin: 0; }
+.eyebrow { font: 700 .78rem/1 var(--f-sign); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.lede { max-width: 62ch; color: var(--muted); font-size: 1.08rem; }
+
+/* ---------- Cabecera ---------- */
+header { display: grid; gap: 18px; }
+.stats { display: flex; flex-wrap: wrap; gap: 10px 28px; align-items: baseline; }
+.stat { display: grid; gap: 2px; }
+.stat b { font: 800 1.5rem/1 var(--f-sign); font-variant-numeric: tabular-nums; }
+.stat span { font-size: .85rem; color: var(--muted); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font: 700 .95rem/1 var(--f-sign); letter-spacing: .02em;
+  padding: 12px 16px; border-radius: 6px; text-decoration: none;
+  background: var(--accent); color: var(--accent-ink); border: 1px solid var(--accent);
+}
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn:focus-visible, button:focus-visible, .mk:focus-visible { outline: 3px solid var(--shell); outline-offset: 2px; }
+
+/* ---------- Mapa + lateral ---------- */
+.route { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+.map-col { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); display: grid; gap: 8px; min-width: 0; }
+.map-frame { background: var(--land); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+#map { display: block; width: 100%; height: auto; max-height: calc(100vh - 80px); }
+.map-note { font-size: .82rem; color: var(--muted); }
+
+.side { display: grid; gap: 24px; min-width: 0; }
+.plaque-stage { display: grid; grid-template-columns: minmax(0, 250px) minmax(0, 1fr); gap: 22px; align-items: start; }
+.stage-text { display: grid; gap: 10px; min-width: 0; }
+.stage-text .kicker { font: 700 .8rem/1 var(--f-sign); letter-spacing: .1em; text-transform: uppercase; color: var(--ribbon); }
+.stage-text ul { margin: 0; padding-left: 1.1em; color: var(--muted); }
+
+/* ---------- La placa ---------- */
+.plaque-box { container-type: inline-size; width: 100%; }
+.plaque {
+  position: relative; overflow: hidden; aspect-ratio: 3 / 4; max-width: 100%;
+  background: var(--plaque-bg); color: var(--plaque-fg);
+  border-radius: 4cqw; box-shadow: 0 0 0 1.2cqw var(--plaque-edge), 0 10px 24px rgb(0 0 0 / .18);
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding: 7cqw 8cqw 6cqw;
+  font-family: var(--f-sign);
+}
+.plaque::before { content: ""; position: absolute; inset: 3cqw; border: .8cqw solid rgb(255 255 255 / .85); border-radius: 2.4cqw; pointer-events: none; }
+.pl-head { font-weight: 700; font-size: 5.2cqw; letter-spacing: .16em; line-height: 1.2; }
+.pl-shell { width: 40cqw; margin-block: 3cqw 1cqw; }
+.pl-num { font-weight: 800; font-size: 6.4cqw; letter-spacing: .1em; color: var(--shell); }
+.pl-name { font-weight: 800; font-size: 8.6cqw; line-height: 1.06; margin-top: 2cqw; min-height: 2.12em; display: flex; align-items: center; text-wrap: balance; }
+.pl-rule { width: 70%; height: .8cqw; background: var(--plaque-fg); opacity: .85; margin-block: 3.5cqw; }
+.pl-km { display: flex; justify-content: space-between; width: 82%; font-weight: 700; font-size: 6cqw; font-variant-numeric: tabular-nums; }
+.pl-km em { font-style: normal; color: var(--shell); }
+.pl-next { margin-top: 3cqw; max-width: 84%; font-weight: 500; font-size: 4.4cqw; line-height: 1.25; }
+.pl-foot { margin-top: auto; font-weight: 500; font-size: 3.8cqw; letter-spacing: .08em; opacity: .9; }
+.pl-ribbon { position: absolute; right: -16cqw; bottom: 6cqw; width: 52cqw; height: 5cqw; background: var(--ribbon); transform: rotate(-38deg); box-shadow: 0 0 0 .6cqw rgb(255 255 255 / .9); }
+
+/* ---------- Lista de fitas ---------- */
+.stops { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
+.stop { border-bottom: 1px solid var(--line); }
+.stop button {
+  all: unset; box-sizing: border-box; cursor: pointer; width: 100%;
+  display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 14px; align-items: center;
+  padding: 12px 8px;
+}
+.stop button:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+.badge {
+  width: 40px; height: 48px; border-radius: 4px; display: grid; place-items: center;
+  background: var(--plaque-bg); color: var(--shell); font: 800 1.05rem/1 var(--f-sign);
+  box-shadow: inset 0 0 0 2px rgb(255 255 255 / .8), 0 0 0 2px var(--plaque-edge);
+  font-variant-numeric: tabular-nums;
+}
+.stop-name { font-family: var(--f-display); font-weight: 700; font-size: 1.12rem; line-height: 1.2; }
+.stop-sub { font-size: .88rem; color: var(--muted); }
+.stop-km { font: 700 .95rem/1 var(--f-sign); font-variant-numeric: tabular-nums; color: var(--muted); text-align: right; }
+.stop.active button { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.stop.active .stop-km { color: var(--accent); }
+
+/* ---------- Ficha técnica ---------- */
+.spec { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; border-top: 2px solid var(--ink); padding-top: 28px; }
+.spec dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 10px 18px; margin: 0; }
+.spec dt { font: 700 .8rem/1.6 var(--f-sign); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.spec dd { margin: 0; }
+.marks { display: grid; gap: 18px; }
+.mark { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px; align-items: center; }
+.mark svg { width: 64px; height: 64px; }
+.practical { display: grid; gap: 14px; }
+.practical ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; max-width: 70ch; }
+.sources { font-size: .85rem; color: var(--muted); display: grid; gap: 4px; }
+.sources a { color: var(--accent); }
+
+/* ---------- SVG mapa ---------- */
+.m-label { font: 700 17px var(--f-body); fill: var(--ink); paint-order: stroke; stroke: var(--halo); stroke-width: 4px; stroke-linejoin: round; }
+.m-small { font: 500 12.5px var(--f-body); fill: var(--muted); paint-order: stroke; stroke: var(--land); stroke-width: 4px; font-style: italic; }
+.mk { cursor: pointer; }
+.mk circle.dot { fill: var(--plaque-bg); stroke: #fff; stroke-width: 2.5; }
+.mk text { font: 800 12px var(--f-sign); fill: var(--shell); }
+.mk text.m-label { font: 700 17px var(--f-body); fill: var(--ink); }
+.mk.active circle.dot { stroke: var(--shell); stroke-width: 4; }
+.mk .ring { fill: none; stroke: var(--shell); stroke-width: 2; opacity: 0; }
+.mk.active .ring { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .mk.active .ring { animation: pulse 1.8s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes pulse { from { transform: scale(.8); opacity: .9 } to { transform: scale(1.7); opacity: 0 } }
+}
+
+@media (max-width: 900px) {
+  .route { grid-template-columns: minmax(0, 1fr); }
+  .map-col { position: static; }
+  #map { max-height: none; }
+  .spec { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 520px) {
+  body { font-size: 16px; }
+  .plaque-stage { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+  .plaque-stage .plaque-box { max-width: 260px; }
+  .stop button { grid-template-columns: 40px minmax(0, 1fr) auto; gap: 10px; }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Romeria de les Canyes · Ruta señalizada</span>
+    <h1>Camí de la Magdalena</h1>
+    <p class="lede">De la Plaça Major de Castelló a la Ermita de la Magdalena siguiendo el itinerario de ida de la Romeria de les Canyes. Cada punto importante lleva una placa de paso numerada, como las del Camino de Santiago, con la concha, los kilómetros recorridos y los que faltan.</p>
+    <div class="stats" id="stats"></div>
+    <div class="actions">
+      <a class="btn" id="gmaps" href="#" target="_blank" rel="noopener">Abrir la ruta a pie en Google Maps ↗</a>
+      <a class="btn ghost" href="#ficha">Ver diseño de la placa</a>
+    </div>
+  </header>
+
+  <section class="route" aria-label="Mapa y puntos de paso">
+    <div class="map-col">
+      <div class="map-frame"><svg id="map" role="img" aria-label="Mapa esquemático del recorrido desde la Plaça Major hasta la Ermita de la Magdalena"></svg></div>
+      <p class="map-note">Trazado esquemático a escala aproximada: los kilómetros se miden sobre esta línea simplificada (el recorrido real ronda los 6,5 km). Toca un número para ver su placa.</p>
+    </div>
+
+    <div class="side">
+      <div class="plaque-stage">
+        <div class="plaque-box" id="plaque"></div>
+        <div class="stage-text" id="stage"></div>
+      </div>
+      <ol class="stops" id="stops"></ol>
+    </div>
+  </section>
+
+  <section class="spec" id="ficha">
+    <div style="display:grid; gap:18px; min-width:0">
+      <span class="eyebrow">Ficha técnica</span>
+      <h2>La placa de punto de paso</h2>
+      <dl>
+        <dt>Formato</dt><dd>30 × 40 cm, vertical, esquinas redondeadas.</dd>
+        <dt>Material</dt><dd>Azulejo de cerámica esmaltada de Castelló en fachadas; chapa vitrificada sobre mojón o poste en el tramo de huerta.</dd>
+        <dt>Colores</dt><dd>Fondo azul esmalte, concha y número en amarillo jacobeo, cinta verde de la Romeria en la esquina inferior.</dd>
+        <dt>Contenido</dt><dd>Número de fita, nombre del lugar, km recorridos, km que quedan hasta la ermita y el siguiente punto.</dd>
+        <dt>Kilometraje</dt><dd>Orientativo: medir con GPS sobre el terreno antes de fabricar las placas.</dd>
+        <dt>Idioma</dt><dd>Valenciano, con la toponimia oficial.</dd>
+        <dt>Colocación</dt><dd>A 2,5 m del suelo en fachada (tramo urbano). A 1,2 m sobre mojón de piedra o poste de madera (tramo rural).</dd>
+      </dl>
+    </div>
+    <div style="display:grid; gap:18px; min-width:0">
+      <span class="eyebrow">Entre placa y placa</span>
+      <h2>Señales de continuidad</h2>
+      <div class="marks">
+        <div class="mark">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="#B8893A"/><circle cx="32" cy="32" r="28" fill="none" stroke="#7C5A22" stroke-width="3"/><g id="mini-shell"></g></svg>
+          <p><b>Concha de bronce en el suelo</b> cada 100 m en el casco urbano, con la charnela apuntando hacia la ermita.</p>
+        </div>
+        <div class="mark">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="4" width="56" height="56" rx="6" style="fill:var(--land);stroke:var(--line)"/><path d="M14 32h28M34 20l12 12-12 12" fill="none" stroke="#F2C230" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <p><b>Flecha amarilla pintada</b> en cada cruce del tramo de huerta, sobre muros, postes o el propio camino.</p>
+        </div>
+        <div class="mark">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="4" width="56" height="56" rx="6" style="fill:var(--land);stroke:var(--line)"/><path d="M14 50 L50 14" stroke="#2E8B4E" stroke-width="8" stroke-linecap="round"/><path d="M14 50 L50 14" stroke="#E7D9A8" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <p><b>Cinta verde</b> en farolas y postes durante las fiestas de la Magdalena, como la que lleva cada canya.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="practical">
+    <span class="eyebrow">Antes de salir</span>
+    <h2>Consejos para hacerla a pie</h2>
+    <ul>
+      <li>La Romeria se celebra el tercer domingo de Cuaresma: misa de romeros a las 8:00 en la Concatedral y salida al terminar. Cualquier otro día la ruta está libre.</li>
+      <li>El tramo urbano es llano. La única subida está al final, en el Tossal de la Magdalena (111 m).</li>
+      <li>Cruza la N-340 solo por el paso señalizado: es la carretera con más tráfico del recorrido.</li>
+      <li>Lleva agua: entre Sant Roc de Canet y la ermita no hay fuentes seguras.</li>
+      <li>La vuelta tradicional (la Tornà) baja por el Caminàs hasta la Basílica del Lledó y regresa al centro por la tarde.</li>
+    </ul>
+    <div class="sources">
+      <span>Itinerario, horarios y datos históricos según:</span>
+      <a href="https://castellondiario.com/romeria-de-les-canyes-magdalena-2025-horarios-paradas-y-tradiciones-imprescindibles/" target="_blank" rel="noopener">Castellón Diario: horarios y paradas de la Romeria</a>
+      <a href="https://www.castelloninformacion.com/el-origen-de-las-tradiciones-la-romeria-de-les-canyes-y-el-recorrido-a-lo-largo-de-su-historia/" target="_blank" rel="noopener">Castellón Información: origen y recorrido de la Romeria</a>
+      <a href="https://es.wikipedia.org/wiki/Ermita_de_la_Magdalena_(Castell%C3%B3n_de_la_Plana)" target="_blank" rel="noopener">Wikipedia: Ermita de la Magdalena</a>
+      <a href="https://es.wikipedia.org/wiki/Ermita_de_San_Roque_de_Canet_(Castell%C3%B3n_de_la_Plana)" target="_blank" rel="noopener">Wikipedia: Ermita de Sant Roc de Canet</a>
+    </div>
+  </section>
+</div>
+
+<script>
+// ---------- Datos de la ruta (coordenadas aproximadas, WGS84) ----------
+const ROUTE = [
+  [39.98618,-0.03752],[39.98642,-0.03778],[39.98680,-0.03812],[39.98745,-0.03800],[39.98790,-0.03770],
+  [39.98850,-0.03680],[39.98920,-0.03590],[39.98975,-0.03530],[39.99150,-0.03500],[39.99380,-0.03450],
+  [39.99600,-0.03400],[39.99760,-0.03360],[39.99950,-0.03280],[40.00180,-0.03180],[40.00450,-0.03050],
+  [40.00650,-0.02950],[40.00780,-0.02780],[40.01000,-0.02620],[40.01300,-0.02450],[40.01560,-0.02330],
+  [40.01694,-0.02250],[40.01900,-0.02080],[40.02150,-0.01900],[40.02450,-0.01720],[40.02750,-0.01520],
+  [40.02980,-0.01380],[40.03080,-0.01280],[40.03167,-0.01167]
+];
+
+const STOPS = [
+  { at: 0, name: "Plaça Major · Ajuntament", plate: "Plaça Major", urban: true, tag: "Inicio",
+    text: "Salida de la Romeria. Tras la misa de romeros en la Concatedral, la comitiva arranca con la canya y su cinta verde, que se reparte en el Mercat Central.",
+    see: ["Ajuntament", "El Fadrí, el campanario exento", "Concatedral de Santa Maria", "Mercat Central"] },
+  { at: 2, name: "Plaça de l'Herba", plate: "Plaça de l'Herba", urban: true, tag: "Casco antiguo",
+    text: "Se rodea el mercado por la Plaça de l'Herba y se toma el carrer Colón hasta el carrer Major, el eje de la villa medieval.",
+    see: ["Carrer Colón", "Carrer Major"] },
+  { at: 7, name: "Plaça de Maria Agustina · el Toll", plate: "Plaça Maria Agustina", urban: true, tag: "Casco antiguo",
+    text: "La antigua plaça del Toll, junto a la línea de la muralla medieval. Desde aquí la avinguda de Caputxins sale recta hacia el norte.",
+    see: ["Final del carrer Major", "Arranque de l'avinguda de Caputxins"] },
+  { at: 11, name: "Primer Molí", plate: "Primer Molí", tag: "Salida de la ciudad",
+    text: "Al final de Caputxins se deja la ciudad. El camí dels Molins acompaña a la Séquia Major entre huertas y antiguos molinos.",
+    see: ["Camí dels Molins", "Séquia Major"] },
+  { at: 13, name: "Pas del Riu Sec", plate: "Pas del Riu Sec", tag: "Huerta",
+    text: "Cruce del cauce del Riu Sec, que solo lleva agua tras lluvias fuertes. Empieza el paisaje abierto de la Plana.",
+    see: ["Cauce del Riu Sec", "Vistas al Tossal de la Magdalena"] },
+  { at: 15, name: "Camí de la Travessa", plate: "Camí de la Travessa", tag: "Huerta",
+    text: "Tramo conocido también como Sangarró d'en Riera. Enlaza el camí dels Molins con el Caminàs.",
+    see: ["Sangarró d'en Riera", "Alquerías y huertos de naranjos"] },
+  { at: 17, name: "El Caminàs", plate: "El Caminàs", tag: "Vía romana",
+    text: "Antigua vía romana que cruza la Plana. Por este mismo camino vuelve por la tarde la Tornà, camino de la Basílica del Lledó.",
+    see: ["Trazado de la Via Augusta", "Ruta de la Tornà"] },
+  { at: 20, name: "Ermita de Sant Roc de Canet", plate: "Sant Roc de Canet", tag: "Parada para almorzar",
+    text: "Ermita de 1652, levantada tras las epidemias de la década de 1640. Parada tradicional para almorzar con higos secos y un vasito de vino dulce. En la Tornà la Colla El Pixaví recibe a los romeros con Els Gojos y danza popular.",
+    see: ["Ermita de Sant Roc (1652)", "Camí Vell de Canet"] },
+  { at: 22, name: "Creuament de la N-340", plate: "Creuament N-340", tag: "Precaución",
+    text: "Único cruce con tráfico intenso. Pasa solo por el paso señalizado y en grupo.",
+    see: ["Inicio de la carretera del Desert de les Palmes"] },
+  { at: 25, name: "Peu del Tossal", plate: "Peu del Tossal", tag: "Al pie del cerro",
+    text: "Explanada al pie del cerro, junto a la carretera del Desert de les Palmes (CV-147). El día de la Romeria aquí se sirve la paella monumental a las 13:00.",
+    see: ["CV-147", "Inicio de la subida"] },
+  { at: 27, name: "Ermita de la Magdalena · Castell Vell", plate: "Ermita de la Magdalena", tag: "Meta",
+    text: "A 111 m, sobre los restos del Castell Vell, fortaleza islámica de los siglos X y XI. En 1251 Jaime I autorizó a sus habitantes a bajar al llano y fundar Castelló; la Romeria recuerda ese traslado. La ermita actual se empezó en 1451.",
+    see: ["Ermita de Santa Maria Magdalena", "Ruinas del Castell Vell", "Vista de toda la Plana"] }
+];
+
+// ---------- Utilidades ----------
+const R = 6371000, rad = d => d * Math.PI / 180;
+function hav(a, b) {
+  const dLa = rad(b[0] - a[0]), dLo = rad(b[1] - a[1]);
+  const h = Math.sin(dLa / 2) ** 2 + Math.cos(rad(a[0])) * Math.cos(rad(b[0])) * Math.sin(dLo / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+const cum = [0];
+for (let i = 1; i < ROUTE.length; i++) cum.push(cum[i - 1] + hav(ROUTE[i - 1], ROUTE[i]));
+const TOTAL = cum[cum.length - 1];
+STOPS.forEach((s, i) => { s.n = i + 1; s.km = cum[s.at] / 1000; s.left = (TOTAL - cum[s.at]) / 1000; s.ll = ROUTE[s.at]; });
+const fmt = km => km.toLocaleString("es-ES", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const pad = n => String(n).padStart(2, "0");
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs = {}, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) {
+    const v = String(attrs[k]);
+    // var() no es fiable en atributos de presentación SVG: va por style
+    if ((k === "fill" || k === "stroke") && /var\(|color-mix/.test(v)) e.style[k] = v;
+    else e.setAttribute(k, v);
+  }
+  if (parent) parent.appendChild(e);
+  return e;
+}
+
+// Concha jacobea: costillas que convergen en la charnela
+function shellSVG(color, cx = 50, cy = 84, r = 60, sw = 6) {
+  let s = "";
+  for (let i = 0; i < 9; i++) {
+    const a = rad(-158 + i * 17);
+    s += `<line x1="${cx}" y1="${cy}" x2="${(cx + r * Math.cos(a)).toFixed(1)}" y2="${(cy + r * Math.sin(a)).toFixed(1)}" style="stroke:${color}" stroke-width="${sw}" stroke-linecap="round"/>`;
+  }
+  s += `<path d="M${cx - 13} ${cy + 2} h26 l-4 9 h-18 z" style="fill:${color}"/>`;
+  return s;
+}
+
+// ---------- Cabecera ----------
+const minutes = Math.round(TOTAL / 1000 / 4 * 60 / 5) * 5;
+document.getElementById("stats").innerHTML = [
+  [fmt(TOTAL / 1000) + " km", "distancia"],
+  [`${Math.floor(minutes / 60)} h ${pad(minutes % 60)} min`, "a pie, a 4 km/h"],
+  ["+80 m", "desnivel aprox."],
+  [String(STOPS.length), "placas de paso"]
+].map(([b, s]) => `<div class="stat"><b>${b}</b><span>${s}</span></div>`).join("");
+
+const via = STOPS.slice(1, -1).filter(s => !s.urban || s.n === 3).slice(0, 9).map(s => s.ll.join(",")).join("|");
+document.getElementById("gmaps").href =
+  `https://www.google.com/maps/dir/?api=1&travelmode=walking&origin=${ROUTE[0].join(",")}&destination=${ROUTE[ROUTE.length - 1].join(",")}&waypoints=${encodeURIComponent(via)}`;
+
+// ---------- Mapa ----------
+const LON0 = -0.044, LON1 = -0.004, LAT0 = 39.981, LAT1 = 40.036, K = 20000, COS = Math.cos(rad(40.01));
+const W = (LON1 - LON0) * COS * K, H = (LAT1 - LAT0) * K;
+const px = ([la, lo]) => [(lo - LON0) * COS * K, (LAT1 - la) * K];
+const pts = arr => arr.map(p => px(p).map(v => v.toFixed(1)).join(",")).join(" ");
+const svg = document.getElementById("map");
+svg.setAttribute("viewBox", `0 0 ${W.toFixed(0)} ${H.toFixed(0)}`);
+
+el("rect", { x: 0, y: 0, width: W, height: H, fill: "var(--land)" }, svg);
+// Casco urbano
+el("polygon", { points: pts([[39.981,-0.044],[39.981,-0.018],[39.9905,-0.0215],[39.9985,-0.0290],[39.9990,-0.0395],[39.9950,-0.044]]), fill: "var(--town)" }, svg);
+// Tossal de la Magdalena: curvas de nivel
+const summit = px(ROUTE[ROUTE.length - 1]);
+[70, 50, 32, 16].forEach((r, i) => el("ellipse", { cx: summit[0] + 4, cy: summit[1] - 4, rx: r * 1.25, ry: r, fill: i === 3 ? "color-mix(in srgb, var(--road) 45%, transparent)" : "none", stroke: "var(--road)", "stroke-width": 1.2, opacity: .9 }, svg));
+// Riu Sec
+el("polyline", { points: pts([[40.0130,-0.0470],[40.0075,-0.0400],[40.0035,-0.0350],[40.0018,-0.0318],[40.0000,-0.0270],[39.9975,-0.0200],[39.9950,-0.0100],[39.9935,-0.0020]]), fill: "none", stroke: "var(--water)", "stroke-width": 4, "stroke-linecap": "round" }, svg);
+// Séquia Major junto al camí dels Molins
+el("polyline", { points: pts(ROUTE.slice(10, 16).map(([a, b]) => [a, b - 0.0007])), fill: "none", stroke: "var(--water)", "stroke-width": 1.5, "stroke-dasharray": "2 3" }, svg);
+// N-340 y CV-147
+el("polyline", { points: pts([[40.0080,-0.0450],[40.0215,-0.0190],[40.0345,-0.0010]]), fill: "none", stroke: "var(--road)", "stroke-width": 7, "stroke-linecap": "round" }, svg);
+el("polyline", { points: pts([[40.0215,-0.0190],[40.0245,-0.0172],[40.0275,-0.0152],[40.0298,-0.0138],[40.0360,-0.0175]]), fill: "none", stroke: "var(--road)", "stroke-width": 4, "stroke-linecap": "round" }, svg);
+
+function label(text, ll, dx, dy, cls = "m-small", anchor = "start", rot = 0) {
+  const [x, y] = px(ll);
+  const t = el("text", { x: x + dx, y: y + dy, class: cls, "text-anchor": anchor }, svg);
+  if (rot) t.setAttribute("transform", `rotate(${rot} ${x + dx} ${y + dy})`);
+  t.textContent = text;
+}
+label("Riu Sec", [40.0118,-0.0436], 0, -8, "m-small", "start", 45);
+label("N-340", [40.0114,-0.0385], 4, -8, "m-small", "start", -34);
+label("CV-147", [40.0330,-0.0165], 6, 0);
+label("Tossal de la Magdalena", [40.0352,-0.0118], 0, 0, "m-small", "middle");
+label("Castelló", [39.9835,-0.0300], 0, 0, "m-small");
+label("Caputxins", [39.9935,-0.0346], 8, 4);
+label("Camí dels Molins", [39.9995,-0.0320], 12, 4);
+
+// Trazado: base + línea amarilla
+const routePts = pts(ROUTE);
+el("polyline", { points: routePts, fill: "none", stroke: "var(--plaque-bg)", "stroke-width": 9, "stroke-linejoin": "round", "stroke-linecap": "round" }, svg);
+el("polyline", { points: routePts, fill: "none", stroke: "var(--shell)", "stroke-width": 3.2, "stroke-linejoin": "round", "stroke-linecap": "round", "stroke-dasharray": "10 6" }, svg);
+
+// Flechas amarillas cada 400 m
+for (let d = 250; d < TOTAL - 150; d += 400) {
+  let i = cum.findIndex(c => c >= d);
+  const f = (d - cum[i - 1]) / (cum[i] - cum[i - 1]);
+  const a = px(ROUTE[i - 1]), b = px(ROUTE[i]);
+  const x = a[0] + (b[0] - a[0]) * f, y = a[1] + (b[1] - a[1]) * f;
+  const ang = Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI;
+  if (d < 900) continue; // en el casco ya hay placas muy juntas
+  el("path", { d: "M-5 -6 L4 0 L-5 6", fill: "none", stroke: "var(--plaque-bg)", "stroke-width": 2.6, "stroke-linecap": "round", "stroke-linejoin": "round", transform: `translate(${(x + 13 * Math.cos(rad(ang - 90))).toFixed(1)} ${(y + 13 * Math.sin(rad(ang - 90))).toFixed(1)}) rotate(${ang.toFixed(0)})` }, svg);
+}
+
+// Inset del casco antiguo
+const IN = { x: W - 250, y: H - 300, w: 234, h: 284, lat0: 39.9856, lat1: 39.9905, lon0: -0.0392, lon1: -0.0344 };
+const ik = Math.min(IN.w / ((IN.lon1 - IN.lon0) * COS), IN.h / (IN.lat1 - IN.lat0));
+const ipx = ([la, lo]) => [IN.x + (lo - IN.lon0) * COS * ik, IN.y + (IN.lat1 - la) * ik];
+const ipts = arr => arr.map(p => ipx(p).map(v => v.toFixed(1)).join(",")).join(" ");
+// marco de origen en el mapa principal
+const o0 = px([IN.lat1, IN.lon0]), o1 = px([IN.lat0, IN.lon1]);
+el("rect", { x: o0[0], y: o0[1], width: o1[0] - o0[0], height: o1[1] - o0[1], fill: "none", stroke: "var(--ink)", "stroke-width": 1.2, "stroke-dasharray": "3 3" }, svg);
+el("line", { x1: o1[0], y1: o1[1], x2: IN.x, y2: IN.y, stroke: "var(--ink)", "stroke-width": .8, "stroke-dasharray": "3 3" }, svg);
+el("rect", { x: IN.x, y: IN.y, width: IN.w, height: IN.h, fill: "var(--town)", stroke: "var(--ink)", "stroke-width": 1.5, rx: 4 }, svg);
+const clip = el("clipPath", { id: "inclip" }, el("defs", {}, svg));
+el("rect", { x: IN.x, y: IN.y, width: IN.w, height: IN.h, rx: 4 }, clip);
+const ig = el("g", { "clip-path": "url(#inclip)" }, svg);
+// Plaça Major (rectángulo aproximado) y Mercat
+const pm = ipts([[39.98660,-0.03790],[39.98660,-0.03700],[39.98605,-0.03700],[39.98605,-0.03790]]);
+el("polygon", { points: pm, fill: "var(--land)", stroke: "var(--road)" }, ig);
+el("polyline", { points: ipts(ROUTE.slice(0, 9)), fill: "none", stroke: "var(--plaque-bg)", "stroke-width": 9, "stroke-linejoin": "round", "stroke-linecap": "round" }, ig);
+el("polyline", { points: ipts(ROUTE.slice(0, 9)), fill: "none", stroke: "var(--shell)", "stroke-width": 3, "stroke-dasharray": "8 5", "stroke-linejoin": "round" }, ig);
+const it = el("text", { x: IN.x + 10, y: IN.y + IN.h - 10, class: "m-small" }, svg); it.textContent = "Centre històric";
+
+// Escala y norte
+const kmPx = K / 111.32;
+const sx = 18, sy = H - 22;
+el("rect", { x: sx, y: sy - 4, width: kmPx / 2, height: 6, fill: "var(--ink)" }, svg);
+el("rect", { x: sx + kmPx / 2, y: sy - 4, width: kmPx / 2, height: 6, fill: "var(--land)", stroke: "var(--ink)" }, svg);
+[["0", 0], ["500 m", kmPx / 2], ["1 km", kmPx]].forEach(([t, dx]) => { const e = el("text", { x: sx + dx, y: sy - 10, class: "m-small", "text-anchor": dx ? "middle" : "start" }, svg); e.textContent = t; });
+const ng = el("g", { transform: "translate(28 34)" }, svg);
+el("path", { d: "M0 -16 L8 10 L0 5 L-8 10 Z", fill: "var(--ink)" }, ng);
+const nt = el("text", { x: 0, y: 26, class: "m-label", "text-anchor": "middle" }, ng); nt.textContent = "N";
+
+// Marcadores
+const SIDE = { 4: "left", 5: "left", 6: "left", 10: "left", 11: "left" };
+const markers = [];
+function marker(s, [x, y], r, parent, showLabel) {
+  const g = el("g", { class: "mk", tabindex: 0, role: "button", "aria-label": `Fita ${s.n}: ${s.name}` }, parent);
+  el("circle", { class: "ring", cx: x, cy: y, r: r + 4 }, g);
+  el("circle", { class: "dot", cx: x, cy: y, r }, g);
+  const t = el("text", { x, y: y + 4.2, "text-anchor": "middle" }, g); t.textContent = s.n;
+  if (showLabel) {
+    const left = SIDE[s.n] === "left";
+    const lt = el("text", { x: x + (left ? -(r + 6) : r + 6), y: y + 5, class: "m-label", "text-anchor": left ? "end" : "start" }, g);
+    lt.textContent = s.plate;
+  }
+  g.addEventListener("click", () => select(s.n - 1, true));
+  g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(s.n - 1, true); } });
+  markers.push({ n: s.n, g });
+}
+STOPS.forEach(s => {
+  if (s.urban) {
+    marker(s, ipx(s.ll), 11, svg, false);
+  } else marker(s, px(s.ll), 11, svg, true);
+});
+// Etiquetas del inset
+[[0, "Plaça Major", 14, 16], [1, "Pl. de l'Herba", -14, -8, "end"], [2, "Pl. Maria Agustina", -14, -10, "end"]].forEach(([i, txt, dx, dy, anc]) => {
+  const [x, y] = ipx(STOPS[i].ll);
+  const t = el("text", { x: x + dx, y: y + dy, class: "m-label", "text-anchor": anc || "start", style: "font-size:13px" }, svg); t.textContent = txt;
+});
+// Cluster en el mapa principal
+const cpt = px(STOPS[0].ll);
+el("circle", { cx: cpt[0], cy: cpt[1], r: 5, fill: "var(--plaque-bg)", stroke: "#fff", "stroke-width": 2 }, svg);
+
+// ---------- Placa grande + lista ----------
+function plaqueHTML(s) {
+  const next = STOPS[s.n];
+  const nextLine = next ? `▸ Pròxima: ${next.plate} · ${fmt(next.km - s.km)} km` : "Final del camí · Benvinguts";
+  return `<div class="plaque" role="img" aria-label="Placa de paso ${s.n}: ${s.plate}">
+    <div class="pl-head">CAMÍ DE LA<br>MAGDALENA</div>
+    <svg class="pl-shell" viewBox="0 0 100 100" aria-hidden="true">${shellSVG("var(--shell)")}</svg>
+    <div class="pl-num">FITA ${pad(s.n)}</div>
+    <div class="pl-name">${s.plate}</div>
+    <div class="pl-rule"></div>
+    <div class="pl-km"><span>km ${fmt(s.km)}</span><em>${s.left > 0.05 ? "falten " + fmt(s.left) : "meta"}</em></div>
+    <div class="pl-next">${nextLine}</div>
+    <div class="pl-foot">ROMERIA DE LES CANYES</div>
+    <div class="pl-ribbon"></div>
+  </div>`;
+}
+const list = document.getElementById("stops");
+list.innerHTML = STOPS.map(s => `<li class="stop" data-i="${s.n - 1}"><button type="button" aria-label="Ver placa ${s.n}: ${s.name}">
+  <span class="badge">${pad(s.n)}</span>
+  <span style="min-width:0"><span class="stop-name">${s.name}</span><br><span class="stop-sub">${s.tag}</span></span>
+  <span class="stop-km">km ${fmt(s.km)}</span></button></li>`).join("");
+list.querySelectorAll(".stop button").forEach(b => b.addEventListener("click", () => select(+b.parentElement.dataset.i, false)));
+
+let current = -1;
+function select(i, fromMap) {
+  if (i === current) return;
+  current = i;
+  const s = STOPS[i];
+  document.getElementById("plaque").innerHTML = plaqueHTML(s);
+  document.getElementById("stage").innerHTML = `
+    <span class="kicker">${s.tag} · km ${fmt(s.km)}</span>
+    <h3>${s.name}</h3>
+    <p>${s.text}</p>
+    <ul>${s.see.map(x => `<li>${x}</li>`).join("")}</ul>`;
+  list.querySelectorAll(".stop").forEach(li => li.classList.toggle("active", +li.dataset.i === i));
+  markers.forEach(m => m.g.classList.toggle("active", m.n === s.n));
+  if (fromMap && window.matchMedia("(max-width: 900px)").matches) {
+    document.getElementById("plaque").scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+}
+select(7, false);
+
+// Concha pequeña para la ficha
+document.getElementById("mini-shell").innerHTML = `<g transform="translate(12 10) scale(.4)">${shellSVG("#F6E3B0", 50, 84, 60, 7)}</g>`;
+</script>
