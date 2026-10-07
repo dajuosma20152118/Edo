@@ -1,7 +1,7 @@
 {
   "name": "Camí de la Magdalena",
   "short_name": "Magdalena",
-  "description": "Ruta señalizada desde la Plaça Major de Castelló hasta la Ermita de la Magdalena.",
+  "description": "Itinerario oficial de la Romeria de les Canyes: anada a la Ermita de la Magdalena y tornada a la Plaça Major.",
   "lang": "es",
   "start_url": "./",
   "scope": "./",

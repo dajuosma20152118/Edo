@@ -1,46 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="Camí de la Magdalena" xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata><name>Camí de la Magdalena: Plaça Major - Ermita de la Magdalena</name>
-    <desc>Itinerario de ida de la Romeria de les Canyes (Castelló). Trazado aproximado.</desc></metadata>
-  <wpt lat="39.98618" lon="-0.03752"><name>Fita 01 · Plaça Major</name><desc>Salida de la Romeria. Tras la misa de romeros en la Concatedral, la comitiva arranca con la canya y su cinta verde, que se reparte en el Mercat Central.</desc><sym>Flag</sym></wpt>
-  <wpt lat="39.9868" lon="-0.03812"><name>Fita 02 · Plaça de l'Herba</name><desc>Se rodea el mercado por la Plaça de l'Herba y se toma el carrer Colón hasta el carrer Major, el eje de la villa medieval.</desc><sym>Flag</sym></wpt>
-  <wpt lat="39.98975" lon="-0.0353"><name>Fita 03 · Plaça Maria Agustina</name><desc>La antigua plaça del Toll, junto a la línea de la muralla medieval. Desde aquí la avinguda de Caputxins sale recta hacia el norte.</desc><sym>Flag</sym></wpt>
-  <wpt lat="39.9976" lon="-0.0336"><name>Fita 04 · Primer Molí</name><desc>Al final de Caputxins se deja la ciudad. El camí dels Molins acompaña a la Séquia Major entre huertas y antiguos molinos.</desc><sym>Flag</sym></wpt>
-  <wpt lat="40.0018" lon="-0.0318"><name>Fita 05 · Pas del Riu Sec</name><desc>Cruce del cauce del Riu Sec, que solo lleva agua tras lluvias fuertes. Empieza el paisaje abierto de la Plana.</desc><sym>Flag</sym></wpt>
-  <wpt lat="40.0065" lon="-0.0295"><name>Fita 06 · Camí de la Travessa</name><desc>Tramo conocido también como Sangarró d'en Riera. Enlaza el camí dels Molins con el Caminàs.</desc><sym>Flag</sym></wpt>
-  <wpt lat="40.01" lon="-0.0262"><name>Fita 07 · El Caminàs</name><desc>Antigua vía romana que cruza la Plana. Por este mismo camino vuelve por la tarde la Tornà, camino de la Basílica del Lledó.</desc><sym>Flag</sym></wpt>
-  <wpt lat="40.01694" lon="-0.0225"><name>Fita 08 · Sant Roc de Canet</name><desc>Ermita de 1652, levantada tras las epidemias de la década de 1640. Parada tradicional para almorzar con higos secos y un vasito de vino dulce. En la Tornà la Colla El Pixaví recibe a los romeros con Els Gojos y danza popular.</desc><sym>Flag</sym></wpt>
-  <wpt lat="40.0215" lon="-0.019"><name>Fita 09 · Creuament N-340</name><desc>Único cruce con tráfico intenso. Pasa solo por el paso señalizado y en grupo.</desc><sym>Flag</sym></wpt>
-  <wpt lat="40.0298" lon="-0.0138"><name>Fita 10 · Peu del Tossal</name><desc>Explanada al pie del cerro, junto a la carretera del Desert de les Palmes (CV-147). El día de la Romeria aquí se sirve la paella monumental a las 13:00.</desc><sym>Flag</sym></wpt>
-  <wpt lat="40.03167" lon="-0.01167"><name>Fita 11 · Ermita de la Magdalena</name><desc>A 111 m, sobre los restos del Castell Vell, fortaleza islámica de los siglos X y XI. En 1251 Jaime I autorizó a sus habitantes a bajar al llano y fundar Castelló; la Romeria recuerda ese traslado. La ermita actual se empezó en 1451.</desc><sym>Flag</sym></wpt>
-  <trk><name>Camí de la Magdalena</name><trkseg>
-    <trkpt lat="39.98618" lon="-0.03752"/>
-    <trkpt lat="39.98642" lon="-0.03778"/>
-    <trkpt lat="39.9868" lon="-0.03812"/>
-    <trkpt lat="39.98745" lon="-0.038"/>
-    <trkpt lat="39.9879" lon="-0.0377"/>
-    <trkpt lat="39.9885" lon="-0.0368"/>
-    <trkpt lat="39.9892" lon="-0.0359"/>
-    <trkpt lat="39.98975" lon="-0.0353"/>
-    <trkpt lat="39.9915" lon="-0.035"/>
-    <trkpt lat="39.9938" lon="-0.0345"/>
-    <trkpt lat="39.996" lon="-0.034"/>
-    <trkpt lat="39.9976" lon="-0.0336"/>
-    <trkpt lat="39.9995" lon="-0.0328"/>
-    <trkpt lat="40.0018" lon="-0.0318"/>
-    <trkpt lat="40.0045" lon="-0.0305"/>
-    <trkpt lat="40.0065" lon="-0.0295"/>
-    <trkpt lat="40.0078" lon="-0.0278"/>
-    <trkpt lat="40.01" lon="-0.0262"/>
-    <trkpt lat="40.013" lon="-0.0245"/>
-    <trkpt lat="40.0156" lon="-0.0233"/>
+  <metadata><name>Camí de la Magdalena: anada i tornada</name>
+    <desc>Itinerari oficial de la Romeria de les Canyes (Castelló). Traçat aproximat.</desc></metadata>
+  <wpt lat="39.98645" lon="-0.03805"><name>Anada A01 · Plaça Vella</name><desc>Salida de la Romeria. Tras la misa de romeros en la Concatedral, la comitiva arranca con la canya y su cinta verde, que se reparte en el Mercat Central.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.98631" lon="-0.03725"><name>Anada A02 · Plaça de l'Herba</name><desc>Junto al Mercat Central. La comitiva rodea el mercado para tomar el carrer de Colom.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.9867" lon="-0.0364"><name>Anada A03 · Carrer de Colom</name><desc>Enlaza la plaça de l'Herba con el carrer Major.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.9877" lon="-0.0351"><name>Anada A04 · Carrer Major</name><desc>El eje de la villa medieval. La Romeria lo recorre hacia el norte hasta el Toll.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.98848" lon="-0.03453"><name>Anada A05 · Plaça del Toll</name><desc>La antigua plaça del Toll, junto a la línea de la muralla medieval. Desde aquí sale la avinguda dels Caputxins.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.9925" lon="-0.0339"><name>Anada A06 · Av. dels Caputxins</name><desc>Avenida recta hacia el norte que lleva hasta el límite de la ciudad.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.9965" lon="-0.0333"><name>Anada A07 · Camí dels Molins</name><desc>Al llegar al Primer Molí se deja la ciudad. El camino acompaña a la Séquia Major entre huertas y antiguos molinos y cruza el Riu Sec.</desc><sym>Flag</sym></wpt>
+  <wpt lat="40.0055" lon="-0.029"><name>Anada A08 · Camí de la Travessa</name><desc>Tramo conocido como Sangarró d'en Riera, que enlaza el camí dels Molins con el Caminàs.</desc><sym>Flag</sym></wpt>
+  <wpt lat="40.01" lon="-0.0219"><name>Anada A09 · Caminàs</name><desc>Antigua vía romana que cruza la Plana. Por este mismo camino baja por la tarde la Tornà.</desc><sym>Flag</sym></wpt>
+  <wpt lat="40.01694" lon="-0.0225"><name>Anada A10 · Sant Roc de Canet</name><desc>Ermita de 1652, levantada tras las epidemias de la década de 1640. Parada tradicional para almorzar con higos secos y un vasito de vino dulce.</desc><sym>Flag</sym></wpt>
+  <wpt lat="40.0215" lon="-0.019"><name>Anada A11 · Nacional València-Barcelona</name><desc>Único cruce con tráfico intenso de la anada. Pasa solo por el paso señalizado y en grupo.</desc><sym>Flag</sym></wpt>
+  <wpt lat="40.0275" lon="-0.0152"><name>Anada A12 · Carretera del Desert</name><desc>La CV-147 lleva al pie del cerro. El día de la Romeria aquí se sirve la paella monumental a las 13:00.</desc><sym>Flag</sym></wpt>
+  <wpt lat="40.03167" lon="-0.01167"><name>Anada A13 · Ermita de la Magdalena</name><desc>A 111 m, sobre los restos del Castell Vell, fortaleza islámica de los siglos X y XI. En 1251 Jaime I autorizó a sus habitantes a bajar al llano y fundar Castelló; la Romeria recuerda ese traslado. La ermita actual se empezó en 1451.</desc><sym>Flag</sym></wpt>
+  <wpt lat="40.03167" lon="-0.01167"><name>Tornada T01 · Ermita de la Magdalena</name><desc>Por la tarde la Romeria emprende la Tornà desde la ermita hacia la Concatedral de Santa Maria.</desc><sym>Flag</sym></wpt>
+  <wpt lat="40.0285" lon="-0.0098"><name>Tornada T02 · Camí de l'Algepsar</name><desc>Primer tramo de bajada desde el Tossal de la Magdalena.</desc><sym>Flag</sym></wpt>
+  <wpt lat="40.0235" lon="-0.0115"><name>Tornada T03 · Camí de l'Autopista</name><desc>El camino sigue en paralelo a la autopista AP-7.</desc><sym>Flag</sym></wpt>
+  <wpt lat="40.0198" lon="-0.0165"><name>Tornada T04 · Camí de Boira</name><desc>Enlaza, entre huertas, con el Caminàs.</desc><sym>Flag</sym></wpt>
+  <wpt lat="40.01694" lon="-0.0225"><name>Tornada T05 · Caminàs · Sant Roc</name><desc>Recepción en la ermita de Sant Roc de Canet: el ermitaño, Cap de Colla de la Colla El Pixaví, recibe a autoridades y romeros con Els Gojos y danza popular. Desde aquí, Caminàs abajo hasta el Lledó.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.99722" lon="-0.02028"><name>Tornada T06 · Basílica del Lledó</name><desc>La Tornà visita a la Mare de Déu del Lledó, patrona de Castelló. Dice la tradición que quien va a la Magdalena y no pasa por el Lledó no puede decir con la boca llena que es hijo de Castelló.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.9935" lon="-0.0255"><name>Tornada T07 · Camí de Lledó</name><desc>Desde la basílica, camino de Lledó hacia la ciudad hasta el lugar conocido como els Bous.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.9912" lon="-0.0285"><name>Tornada T08 · Camí de la Plana</name><desc>Último tramo de camino antes de entrar en las calles de Castelló.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.99" lon="-0.03"><name>Tornada T09 · Carrer de Sant Roc</name><desc>La Tornà entra en la ciudad por el carrer de Sant Roc.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.9893" lon="-0.0313"><name>Tornada T10 · Forn del Pla</name><desc>Al anochecer la Tornà entra por el Forn del Pla, donde se celebra el acto de Les Tres Caigudes. De aquí parten también las gaiatas.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.9879" lon="-0.0322"><name>Tornada T11 · Carrer de Sant Fèlix</name><desc>Del Forn del Pla hacia la plaça del Descarregador.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.9864" lon="-0.033"><name>Tornada T12 · Plaça del Descarregador</name><desc>La actual plaça de Clavé.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.9858" lon="-0.035"><name>Tornada T13 · Carrer d'Enmig</name><desc>Calle paralela al carrer Major, camino de la Porta del Sol.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.9851" lon="-0.037"><name>Tornada T14 · Porta del Sol</name><desc>Antigua puerta de la muralla.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.9845" lon="-0.0376"><name>Tornada T15 · Carrer de les Salines</name><desc>El actual carrer de Gasset, hacia la plaça de la Pau.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.98385" lon="-0.03793"><name>Tornada T16 · Plaça de la Pau</name><desc>Plaza del Teatre Principal.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.98575" lon="-0.03652"><name>Tornada T17 · Carrer Major</name><desc>La Tornà vuelve al eje de la villa medieval.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.9861" lon="-0.0369"><name>Tornada T18 · Arxiprest Balaguer</name><desc>Último tramo: desemboca en la Plaça Major.</desc><sym>Flag</sym></wpt>
+  <wpt lat="39.98655" lon="-0.03735"><name>Tornada T19 · Plaça Vella</name><desc>Final de la Tornà: la Romeria entra en la Plaça Major y termina en la Concatedral de Santa Maria.</desc><sym>Flag</sym></wpt>
+  <trk><name>Anada</name><trkseg>
+    <trkpt lat="39.98645" lon="-0.03805"/>
+    <trkpt lat="39.98631" lon="-0.03725"/>
+    <trkpt lat="39.9867" lon="-0.0364"/>
+    <trkpt lat="39.987" lon="-0.03561"/>
+    <trkpt lat="39.9877" lon="-0.0351"/>
+    <trkpt lat="39.98848" lon="-0.03453"/>
+    <trkpt lat="39.9905" lon="-0.0342"/>
+    <trkpt lat="39.9925" lon="-0.0339"/>
+    <trkpt lat="39.9948" lon="-0.0336"/>
+    <trkpt lat="39.9965" lon="-0.0333"/>
+    <trkpt lat="39.999" lon="-0.0325"/>
+    <trkpt lat="40.0018" lon="-0.0315"/>
+    <trkpt lat="40.0042" lon="-0.0305"/>
+    <trkpt lat="40.0055" lon="-0.029"/>
+    <trkpt lat="40.0063" lon="-0.0255"/>
+    <trkpt lat="40.0068" lon="-0.0218"/>
+    <trkpt lat="40.01" lon="-0.0219"/>
+    <trkpt lat="40.0135" lon="-0.0221"/>
     <trkpt lat="40.01694" lon="-0.0225"/>
-    <trkpt lat="40.019" lon="-0.0208"/>
+    <trkpt lat="40.0192" lon="-0.0208"/>
     <trkpt lat="40.0215" lon="-0.019"/>
     <trkpt lat="40.0245" lon="-0.0172"/>
     <trkpt lat="40.0275" lon="-0.0152"/>
     <trkpt lat="40.0298" lon="-0.0138"/>
     <trkpt lat="40.0308" lon="-0.0128"/>
     <trkpt lat="40.03167" lon="-0.01167"/>
+  </trkseg></trk>
+  <trk><name>Tornada</name><trkseg>
+    <trkpt lat="40.03167" lon="-0.01167"/>
+    <trkpt lat="40.0305" lon="-0.0105"/>
+    <trkpt lat="40.0285" lon="-0.0098"/>
+    <trkpt lat="40.026" lon="-0.0102"/>
+    <trkpt lat="40.0235" lon="-0.0115"/>
+    <trkpt lat="40.0215" lon="-0.0135"/>
+    <trkpt lat="40.0198" lon="-0.0165"/>
+    <trkpt lat="40.018" lon="-0.0195"/>
+    <trkpt lat="40.01694" lon="-0.0225"/>
+    <trkpt lat="40.0135" lon="-0.0221"/>
+    <trkpt lat="40.01" lon="-0.0219"/>
+    <trkpt lat="40.005" lon="-0.0216"/>
+    <trkpt lat="40.001" lon="-0.0211"/>
+    <trkpt lat="39.99722" lon="-0.02028"/>
+    <trkpt lat="39.9955" lon="-0.0225"/>
+    <trkpt lat="39.9935" lon="-0.0255"/>
+    <trkpt lat="39.9923" lon="-0.027"/>
+    <trkpt lat="39.9912" lon="-0.0285"/>
+    <trkpt lat="39.99" lon="-0.03"/>
+    <trkpt lat="39.9893" lon="-0.0313"/>
+    <trkpt lat="39.9879" lon="-0.0322"/>
+    <trkpt lat="39.9864" lon="-0.033"/>
+    <trkpt lat="39.9858" lon="-0.035"/>
+    <trkpt lat="39.9851" lon="-0.037"/>
+    <trkpt lat="39.9845" lon="-0.0376"/>
+    <trkpt lat="39.98385" lon="-0.03793"/>
+    <trkpt lat="39.9847" lon="-0.0372"/>
+    <trkpt lat="39.98575" lon="-0.03652"/>
+    <trkpt lat="39.9861" lon="-0.0369"/>
+    <trkpt lat="39.98655" lon="-0.03735"/>
   </trkseg></trk>
 </gpx>

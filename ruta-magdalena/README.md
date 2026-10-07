@@ -1,9 +1,9 @@
 # Camí de la Magdalena
 
-Ruta señalizada al estilo del Camino de Santiago desde la **Plaça Major (Ajuntament) de Castelló** hasta la **Ermita de la Magdalena**, siguiendo el itinerario de ida de la Romeria de les Canyes.
+Itinerario oficial de la Romeria de les Canyes señalizado al estilo del Camino de Santiago, en dos sentidos: la **anada** de la Plaça Major (Ajuntament) de Castelló a la **Ermita de la Magdalena** y la **tornada** por el Caminàs y el Lledó de vuelta a la Plaça Major.
 
-- `index.html`: mapa del recorrido, las 11 placas de punto de paso (fites) y la ficha técnica de la placa.
-- `ruta.gpx`: trazado y puntos de paso para cargar en una app de GPS (Wikiloc, OsmAnd, Google My Maps…).
+- `index.html`: mapa de los dos recorridos, las placas de punto de paso (fites) de cada uno, el itinerario oficial y la ficha técnica de las placas.
+- `ruta.gpx`: los dos trazados y todos los puntos de paso para cargar en una app de GPS (Wikiloc, OsmAnd, Google My Maps…).
 - `manifest.webmanifest`, `sw.js`, `icons/`: la convierten en app instalable que funciona sin conexión.
 
 ## Descargar la app
@@ -14,18 +14,46 @@ Ruta señalizada al estilo del Camino de Santiago desde la **Plaça Major (Ajunt
 
 Dentro de la app, el botón **Mostrar mi posición** sitúa al caminante en el mapa y le dice a qué distancia está de la fita más cercana.
 
-| Fita | Punto de paso | Tipo |
-|---|---|---|
-| 01 | Plaça Major · Ajuntament | Inicio |
-| 02 | Plaça de l'Herba | Casco antiguo |
-| 03 | Plaça de Maria Agustina · el Toll | Casco antiguo |
-| 04 | Primer Molí | Salida de la ciudad |
-| 05 | Pas del Riu Sec | Huerta |
-| 06 | Camí de la Travessa | Huerta |
-| 07 | El Caminàs | Vía romana |
-| 08 | Ermita de Sant Roc de Canet | Parada para almorzar |
-| 09 | Creuament de la N-340 | Precaución |
-| 10 | Peu del Tossal | Al pie del cerro |
-| 11 | Ermita de la Magdalena · Castell Vell | Meta |
+### Anada (Plaça Major → Ermita de la Magdalena) · placas azules
+
+| Fita | Punto de paso |
+|---|---|
+| 01 | Plaça Vella (Major) · Ajuntament |
+| 02 | Plaça de l'Herba |
+| 03 | Carrer de Colom |
+| 04 | Carrer Major |
+| 05 | Plaça del Toll (Maria Agustina) |
+| 06 | Avinguda dels Caputxins |
+| 07 | Camí dels Molins · Primer Molí |
+| 08 | Camí de la Travessa (Sangarró d'en Riera) |
+| 09 | Caminàs |
+| 10 | Ermita de Sant Roc de Canet |
+| 11 | Nacional València-Barcelona (N-340) |
+| 12 | Carretera del Desert de les Palmes |
+| 13 | Ermita de la Magdalena · Castell Vell |
+
+### Tornada (Ermita de la Magdalena → Plaça Major) · placas verdes
+
+| Fita | Punto de paso |
+|---|---|
+| 01 | Ermita de la Magdalena |
+| 02 | Camí de l'Algepsar |
+| 03 | Camí que voreja l'Autopista |
+| 04 | Camí de Boira |
+| 05 | Caminàs · Sant Roc de Canet |
+| 06 | Basílica del Lledó |
+| 07 | Camí de Lledó (fins als Bous) |
+| 08 | Camí de la Plana |
+| 09 | Carrer de Sant Roc |
+| 10 | Forn del Pla · Les Tres Caigudes |
+| 11 | Carrer de Sant Fèlix |
+| 12 | Plaça del Descarregador (Clavé) |
+| 13 | Carrer d'Enmig |
+| 14 | Porta del Sol |
+| 15 | Carrer de les Salines (Gasset) |
+| 16 | Plaça de la Pau |
+| 17 | Carrer Major |
+| 18 | Carrer Arxiprest Balaguer |
+| 19 | Plaça Vella (Major) · Concatedral |
 
 Las coordenadas son aproximadas y el trazado está simplificado, así que los kilómetros que salen en las placas son orientativos. Antes de fabricar las placas hay que medirlos con GPS sobre el terreno.
