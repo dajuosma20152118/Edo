@@ -3,6 +3,7 @@
 Itinerario oficial de la Romeria de les Canyes señalizado al estilo del Camino de Santiago, en dos sentidos: la **anada** de la Plaça Major (Ajuntament) de Castelló a la **Ermita de la Magdalena** y la **tornada** por el Caminàs y el Lledó de vuelta a la Plaça Major.
 
 - `index.html`: mapa de los dos recorridos, las placas de punto de paso (fites) de cada uno, el itinerario oficial y la ficha técnica de las placas.
+- `editor.html`: editor para marcar a mano el trazado de la anada y colocar sus placas sobre un mapa real, o grabarlo caminando con el GPS. Lo que se guarda lo usa la guía en ese mismo dispositivo, y se puede exportar para fijarlo en el repositorio.
 - `ruta.gpx`: los dos trazados y todos los puntos de paso para cargar en una app de GPS (Wikiloc, OsmAnd, Google My Maps…).
 - `manifest.webmanifest`, `sw.js`, `icons/`: la convierten en app instalable que funciona sin conexión.
 

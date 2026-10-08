@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1E4C93">
+<title>Marcar la anada</title>
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:wght@700&family=Alegreya+Sans:wght@400;500;700&family=Overpass:wght@700;800&display=swap">
+<style>
+/* Layout: mapa real a la izquierda (arriba en el móvil); panel de herramientas y lista de fitas al lado. */
+:root {
+  --ground: #F2F4F1; --surface: #FFFFFF; --ink: #1B2331; --muted: #5A6476; --line: #D3D9DE;
+  --anada: #1E4C93; --anada-edge: #163A72; --shell: #F2C230; --warn: #B4471F; --ok: #1D6B47;
+  --f-display: "Alegreya", Georgia, serif;
+  --f-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --f-sign: "Overpass", "Arial Narrow", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --ground: #111721; --surface: #18202C; --ink: #E6EBF1; --muted: #9AA5B5; --line: #2A3442; --warn: #F08A5D; --ok: #5CC28A; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --ground: #111721; --surface: #18202C; --ink: #E6EBF1; --muted: #9AA5B5; --line: #2A3442; --warn: #F08A5D; --ok: #5CC28A; color-scheme: dark; }
+* { box-sizing: border-box; }
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 16px/1.5 var(--f-body); padding-inline: 16px; padding-block: 20px 40px; }
+.wrap { max-width: 1280px; margin: 0 auto; display: grid; gap: 16px; }
+h1 { font: 700 clamp(1.7rem, 4vw, 2.4rem)/1.1 var(--f-display); margin: 0; }
+h2 { font: 700 1.25rem/1.2 var(--f-display); margin: 0; }
+p { margin: 0; }
+a { color: var(--anada); }
+.top { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: end; justify-content: space-between; }
+.help { color: var(--muted); max-width: 70ch; }
+.layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+#map { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); height: min(78vh, 760px); border-radius: 8px; border: 1px solid var(--line); background: #ddd; }
+.panel { display: grid; gap: 16px; min-width: 0; }
+.box { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; display: grid; gap: 10px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; }
+button, .btn {
+  font: 700 .9rem/1 var(--f-sign); letter-spacing: .02em; cursor: pointer; text-decoration: none;
+  padding: 10px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+}
+button.primary, .btn.primary { background: var(--anada); color: #fff; border-color: var(--anada); }
+button.on { background: var(--shell); color: #1B2331; border-color: var(--shell); }
+button:disabled { opacity: .45; cursor: default; }
+button:focus-visible, .btn:focus-visible { outline: 3px solid var(--shell); outline-offset: 2px; }
+.status { font-size: .95rem; min-height: 1.5em; }
+.status.warn { color: var(--warn); }
+.status.ok { color: var(--ok); }
+.fitas { list-style: none; margin: 0; padding: 0; display: grid; }
+.fitas li { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.fitas li.placing { background: color-mix(in srgb, var(--shell) 25%, transparent); }
+.badge { width: 32px; height: 38px; border-radius: 4px; display: grid; place-items: center; background: var(--anada); color: var(--shell); font: 800 .9rem/1 var(--f-sign); box-shadow: inset 0 0 0 2px rgb(255 255 255 / .8), 0 0 0 2px var(--anada-edge); }
+.badge.off { background: var(--line); color: var(--muted); box-shadow: none; }
+.fname { font-weight: 700; line-height: 1.2; min-width: 0; }
+.fsub { font-size: .82rem; color: var(--muted); font-weight: 400; }
+textarea { width: 100%; min-height: 120px; font: 12px/1.4 ui-monospace, Menlo, monospace; border-radius: 6px; border: 1px solid var(--line); background: var(--ground); color: var(--ink); padding: 8px; }
+.sel { font-size: .95rem; }
+select { font: inherit; padding: 8px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); max-width: 100%; }
+/* Marcadores del mapa */
+.vx { width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 3px solid var(--anada); box-shadow: 0 1px 3px rgb(0 0 0 / .4); }
+.vx.sel { border-color: var(--shell); background: var(--anada); }
+.fx { width: 28px; height: 34px; border-radius: 4px; display: grid; place-items: center; background: var(--anada); color: var(--shell); font: 800 13px/1 var(--f-sign); box-shadow: inset 0 0 0 2px #fff, 0 2px 6px rgb(0 0 0 / .45); }
+.fx.sel { outline: 3px solid var(--shell); }
+@media (max-width: 860px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  #map { position: static; height: 62vh; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div style="display:grid; gap:6px; min-width:0">
+      <h1>Marcar la anada</h1>
+      <p class="help">Toca el mapa para ir añadiendo puntos del camino, en orden desde la Plaça Major. Arrastra un punto para moverlo y tócalo para borrarlo o poner una placa. Con «Colocar» sitúas cada una de las 15 placas sobre el trazado.</p>
+    </div>
+    <a class="btn" href="index.html#anada">Volver a la guía</a>
+  </div>
+
+  <div class="layout">
+    <div id="map" aria-label="Mapa para trazar la anada"></div>
+
+    <div class="panel">
+      <div class="box">
+        <div class="row">
+          <button type="button" id="b-draw" class="on" aria-pressed="true">Añadir puntos</button>
+          <button type="button" id="b-undo">Deshacer</button>
+          <button type="button" id="b-gps">Grabar caminando</button>
+        </div>
+        <p class="status" id="status" aria-live="polite"></p>
+        <div class="sel" id="selbox" hidden>
+          <p id="seltext"></p>
+          <div class="row" style="margin-top:8px">
+            <select id="selfita" aria-label="Placa para este punto"></select>
+            <button type="button" id="b-setfita">Poner placa aquí</button>
+            <button type="button" id="b-del">Borrar punto</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="row" style="justify-content:space-between; align-items:center">
+          <h2>Placas de la anada</h2>
+          <span class="fsub" id="km"></span>
+        </div>
+        <ol class="fitas" id="fitas"></ol>
+      </div>
+
+      <div class="box">
+        <div class="row">
+          <button type="button" class="primary" id="b-save">Guardar y usar en la guía</button>
+          <button type="button" id="b-reset">Volver al trazado original</button>
+          <button type="button" id="b-clear">Empezar de cero</button>
+        </div>
+        <p class="status" id="savestatus" aria-live="polite"></p>
+        <details>
+          <summary>Exportar el trazado</summary>
+          <p class="help" style="margin-block:8px">Copia este texto y envíamelo para dejar tu trazado fijo en la web y en la app para todo el mundo.</p>
+          <textarea id="export" readonly></textarea>
+          <div class="row" style="margin-top:8px"><button type="button" id="b-copy">Copiar</button></div>
+        </details>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const KEY = "camino-magdalena:anada";
+// Trazado y placas de partida (los de la guía)
+const DEFAULT = {"path": [[39.98645, -0.03805], [39.98631, -0.03725], [39.9867, -0.0364], [39.987, -0.03561], [39.9877, -0.0351], [39.98848, -0.03453], [39.9905, -0.0342], [39.9925, -0.0339], [39.9948, -0.0336], [39.9965, -0.0333], [40, -0.0323], [40.0018, -0.0315], [40.0042, -0.0305], [40.0055, -0.029], [40.0063, -0.0255], [40.0068, -0.0218], [40.01, -0.0219], [40.0135, -0.0221], [40.01694, -0.0225], [40.0195, -0.0205], [40.022, -0.018], [40.0245, -0.016], [40.027, -0.0145], [40.0295, -0.013], [40.03167, -0.01167]], "fitas": [0, 1, 2, 4, 5, 7, 9, 10, 12, 13, 16, 18, 20, 22, 24], "names": ["Plaça Major", "Plaça de l'Herba", "Carrer de Colom", "Carrer Major", "Plaça Maria Agustina", "Av. dels Caputxins", "Plaça del Primer Molí", "Camí dels Molins", "Plaça del Segon Molí", "Camí de la Travessera", "Caminàs", "Parada a Sant Roc", "Camí de l'Algepsar", "Camí Vell de Barcelona", "Ermita de la Magdalena"]};
+const NAMES = DEFAULT.names;
+const N = NAMES.length;
+
+let path, fitas, selected = -1, placing = -1, drawing = true, watchId = null;
+const undo = [];
+function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY) || "null");
+    if (s && Array.isArray(s.path) && Array.isArray(s.fitas) && s.fitas.length === N) return { path: s.path, fitas: s.fitas };
+  } catch (e) {}
+  return { path: DEFAULT.path.map(p => p.slice()), fitas: DEFAULT.fitas.slice() };
+}
+({ path, fitas } = load());
+const snapshot = () => undo.push(JSON.stringify({ path, fitas }));
+
+// ---------- Mapa ----------
+const map = L.map("map", { zoomControl: true }).setView([40.008, -0.025], 14);
+// Mapa base de CARTO (datos de OpenStreetMap); funciona también dentro de la app de Android
+L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+  maxZoom: 20, subdomains: "abcd",
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+}).addTo(map);
+const line = L.polyline([], { color: "#1E4C93", weight: 5, opacity: .9 }).addTo(map);
+const casing = L.polyline([], { color: "#F2C230", weight: 2, dashArray: "8 6" }).addTo(map);
+const layer = L.layerGroup().addTo(map);
+if (path.length > 1) map.fitBounds(L.latLngBounds(path), { padding: [30, 30] });
+
+const fitaAt = i => fitas.indexOf(i);
+function render() {
+  line.setLatLngs(path); casing.setLatLngs(path);
+  layer.clearLayers();
+  path.forEach((p, i) => {
+    const f = fitaAt(i);
+    const icon = f >= 0
+      ? L.divIcon({ className: "", html: `<div class="fx${i === selected ? " sel" : ""}">${String(f + 1).padStart(2, "0")}</div>`, iconSize: [28, 34], iconAnchor: [14, 17] })
+      : L.divIcon({ className: "", html: `<div class="vx${i === selected ? " sel" : ""}"></div>`, iconSize: [14, 14], iconAnchor: [7, 7] });
+    const m = L.marker(p, { icon, draggable: true, title: f >= 0 ? `Fita ${f + 1}: ${NAMES[f]}` : `Punto ${i + 1}`, zIndexOffset: f >= 0 ? 1000 : 0 });
+    m.on("dragstart", snapshot);
+    m.on("drag", e => { const ll = e.target.getLatLng(); path[i] = [round(ll.lat), round(ll.lng)]; line.setLatLngs(path); casing.setLatLngs(path); });
+    m.on("dragend", () => { save(false); render(); });
+    m.on("click", e => { L.DomEvent.stopPropagation(e); select(i); });
+    m.addTo(layer);
+  });
+  renderList(); renderSel(); renderExport();
+}
+const round = v => Math.round(v * 1e6) / 1e6;
+
+// Distancias
+const R = 6371000, rad = d => d * Math.PI / 180;
+function hav(a, b) {
+  const dLa = rad(b[0] - a[0]), dLo = rad(b[1] - a[1]);
+  const h = Math.sin(dLa / 2) ** 2 + Math.cos(rad(a[0])) * Math.cos(rad(b[0])) * Math.sin(dLo / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+function cum() { const c = [0]; for (let i = 1; i < path.length; i++) c.push(c[i - 1] + hav(path[i - 1], path[i])); return c; }
+const fmt = km => km.toLocaleString("es-ES", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+// Punto más cercano del trazado (para insertar una placa o un punto intermedio)
+function nearestOnPath(ll) {
+  const cosl = Math.cos(rad(ll[0]));
+  let best = { d: Infinity, seg: -1, p: null };
+  for (let i = 0; i < path.length - 1; i++) {
+    const ax = path[i][1] * cosl, ay = path[i][0], bx = path[i + 1][1] * cosl, by = path[i + 1][0], px = ll[1] * cosl, py = ll[0];
+    const dx = bx - ax, dy = by - ay, L2 = dx * dx + dy * dy;
+    const t = L2 ? Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / L2)) : 0;
+    const qx = ax + t * dx, qy = ay + t * dy, d = (px - qx) ** 2 + (py - qy) ** 2;
+    if (d < best.d) best = { d, seg: i, p: [round(qy), round(qx / cosl)], t };
+  }
+  return best;
+}
+function insertVertex(k, p) {
+  path.splice(k, 0, p);
+  fitas = fitas.map(v => (v !== null && v >= k ? v + 1 : v));
+}
+
+map.on("click", e => {
+  const ll = [round(e.latlng.lat), round(e.latlng.lng)];
+  if (placing >= 0) {
+    if (path.length < 2) return status("Primero dibuja el camino con al menos dos puntos.", "warn");
+    snapshot();
+    const n = nearestOnPath(ll);
+    let k;
+    if (n.t < 0.02) k = n.seg; else if (n.t > 0.98) k = n.seg + 1; else { k = n.seg + 1; insertVertex(k, n.p); }
+    const old = fitaAt(k); if (old >= 0 && old !== placing) fitas[old] = null;
+    fitas[placing] = k;
+    status(`Placa ${placing + 1} · ${NAMES[placing]} colocada.`, "ok");
+    placing = -1; selected = k; save(false); render(); checkOrder();
+    return;
+  }
+  if (!drawing) { select(-1); return; }
+  snapshot();
+  if (selected >= 0 && selected < path.length - 1) { insertVertex(selected + 1, ll); selected = selected + 1; }
+  else { path.push(ll); selected = path.length - 1; }
+  save(false); render();
+});
+
+function select(i) { selected = i; placing = -1; render(); }
+function renderSel() {
+  const box = document.getElementById("selbox");
+  if (selected < 0 || selected >= path.length) { box.hidden = true; return; }
+  box.hidden = false;
+  const f = fitaAt(selected), c = cum();
+  document.getElementById("seltext").textContent =
+    `Punto ${selected + 1} de ${path.length} · km ${fmt(c[selected] / 1000)}` + (f >= 0 ? ` · Placa ${f + 1}: ${NAMES[f]}` : "") +
+    (drawing && selected < path.length - 1 ? ". Los puntos nuevos se insertarán después de este." : "");
+  const sel = document.getElementById("selfita");
+  sel.innerHTML = NAMES.map((n, k) => `<option value="${k}"${k === f ? " selected" : ""}>${String(k + 1).padStart(2, "0")} · ${n}</option>`).join("");
+}
+document.getElementById("b-setfita").onclick = () => {
+  const k = +document.getElementById("selfita").value;
+  snapshot();
+  const old = fitaAt(selected); if (old >= 0) fitas[old] = null;
+  fitas[k] = selected; save(false); render(); checkOrder();
+};
+document.getElementById("b-del").onclick = () => {
+  if (selected < 0) return;
+  snapshot();
+  path.splice(selected, 1);
+  fitas = fitas.map(v => (v === selected ? null : v !== null && v > selected ? v - 1 : v));
+  selected = Math.min(selected, path.length - 1);
+  save(false); render();
+};
+
+function renderList() {
+  const c = cum();
+  document.getElementById("km").textContent = path.length > 1 ? `${fmt(c[c.length - 1] / 1000)} km trazados` : "";
+  document.getElementById("fitas").innerHTML = NAMES.map((n, k) => {
+    const at = fitas[k], on = at !== null && at !== undefined && at < path.length;
+    return `<li class="${k === placing ? "placing" : ""}"><span class="badge${on ? "" : " off"}">${String(k + 1).padStart(2, "0")}</span>
+      <span class="fname">${n}<br><span class="fsub">${on ? "km " + fmt(c[at] / 1000) : "Sin colocar"}</span></span>
+      <span class="row"><button type="button" data-place="${k}">${k === placing ? "Toca el mapa…" : "Colocar"}</button>${on ? `<button type="button" data-go="${k}" aria-label="Ver placa ${k + 1}">Ver</button>` : ""}</span></li>`;
+  }).join("");
+  document.querySelectorAll("[data-place]").forEach(b => b.onclick = () => {
+    const k = +b.dataset.place; placing = placing === k ? -1 : k; selected = -1;
+    status(placing >= 0 ? `Toca el mapa sobre el camino donde va la placa ${k + 1} · ${NAMES[k]}.` : "");
+    render();
+  });
+  document.querySelectorAll("[data-go]").forEach(b => b.onclick = () => { const k = +b.dataset.go; map.setView(path[fitas[k]], Math.max(map.getZoom(), 17)); select(fitas[k]); });
+}
+
+function checkOrder() {
+  const missing = fitas.map((v, k) => (v === null || v === undefined ? k + 1 : 0)).filter(Boolean);
+  const order = fitas.every((v, k) => k === 0 || v === null || fitas[k - 1] === null || v > fitas[k - 1]);
+  if (!order) status("Las placas deben ir en orden a lo largo del camino: revisa el número de alguna.", "warn");
+  return { missing, order };
+}
+function status(t, cls = "") { const s = document.getElementById("status"); s.textContent = t; s.className = "status " + cls; }
+
+// ---------- Guardar / exportar ----------
+function save(announce) {
+  try { localStorage.setItem(KEY + ":draft", JSON.stringify({ path, fitas })); } catch (e) {}
+  if (!announce) return;
+}
+document.getElementById("b-save").onclick = () => {
+  const { missing, order } = checkOrder(), out = document.getElementById("savestatus");
+  if (path.length < 2) { out.textContent = "Dibuja el camino antes de guardar."; out.className = "status warn"; return; }
+  if (missing.length) { out.textContent = `Faltan por colocar las placas ${missing.join(", ")}.`; out.className = "status warn"; return; }
+  if (!order) { out.textContent = "Las placas no están en orden a lo largo del camino."; out.className = "status warn"; return; }
+  try {
+    localStorage.setItem(KEY, JSON.stringify({ path, fitas, saved: new Date().toISOString() }));
+    out.innerHTML = 'Guardado. La guía de este dispositivo ya usa tu trazado. <a href="index.html#anada">Verlo en la guía</a>';
+    out.className = "status ok";
+  } catch (e) { out.textContent = "No se ha podido guardar en este dispositivo."; out.className = "status warn"; }
+};
+document.getElementById("b-reset").onclick = () => {
+  snapshot();
+  try { localStorage.removeItem(KEY); localStorage.removeItem(KEY + ":draft"); } catch (e) {}
+  path = DEFAULT.path.map(p => p.slice()); fitas = DEFAULT.fitas.slice(); selected = -1; placing = -1;
+  document.getElementById("savestatus").textContent = "Vuelves al trazado original de la guía.";
+  document.getElementById("savestatus").className = "status";
+  render(); map.fitBounds(L.latLngBounds(path), { padding: [30, 30] });
+};
+document.getElementById("b-clear").onclick = () => {
+  snapshot(); path = []; fitas = Array(N).fill(null); selected = -1; placing = -1;
+  status("Toca el mapa en la Plaça Major para empezar.");
+  save(false); render(); map.setView([39.9864, -0.0378], 17);
+};
+document.getElementById("b-undo").onclick = () => {
+  const s = undo.pop(); if (!s) return status("No hay nada que deshacer.");
+  ({ path, fitas } = JSON.parse(s)); selected = -1; placing = -1; save(false); render();
+};
+document.getElementById("b-draw").onclick = e => {
+  drawing = !drawing; e.target.classList.toggle("on", drawing); e.target.setAttribute("aria-pressed", drawing);
+  status(drawing ? "Toca el mapa para añadir puntos." : "Modo de solo mover: arrastra puntos o tócalos para editarlos.");
+};
+function renderExport() {
+  document.getElementById("export").value = JSON.stringify({ anada: { path, fitas: fitas.map((v, k) => ({ fita: k + 1, nom: NAMES[k], punt: v })) } });
+}
+document.getElementById("b-copy").onclick = () => {
+  const ta = document.getElementById("export");
+  const done = () => status("Trazado copiado.", "ok");
+  try { navigator.clipboard.writeText(ta.value).then(done, () => { ta.select(); document.execCommand("copy"); done(); }); }
+  catch (e) { ta.select(); try { document.execCommand("copy"); done(); } catch (e2) { status("Selecciona el texto y cópialo a mano.", "warn"); } }
+};
+
+// ---------- Grabar caminando con el GPS ----------
+document.getElementById("b-gps").onclick = e => {
+  const b = e.target;
+  if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; b.classList.remove("on"); b.textContent = "Grabar caminando"; status("Grabación parada."); return; }
+  if (!navigator.geolocation) return status("Este dispositivo no permite usar el GPS aquí.", "warn");
+  snapshot();
+  b.classList.add("on"); b.textContent = "Parar grabación";
+  status("Grabando: camina y el trazado se irá dibujando cada 15 m.");
+  watchId = navigator.geolocation.watchPosition(p => {
+    if (p.coords.accuracy > 35) return status(`Esperando mejor señal (precisión ${Math.round(p.coords.accuracy)} m)…`);
+    const ll = [round(p.coords.latitude), round(p.coords.longitude)];
+    if (!path.length || hav(path[path.length - 1], ll) >= 15) { path.push(ll); save(false); render(); map.panTo(ll); }
+    status(`Grabando · ${path.length} puntos · precisión ${Math.round(p.coords.accuracy)} m`);
+  }, err => {
+    watchId = null; b.classList.remove("on"); b.textContent = "Grabar caminando";
+    status(err.code === 1 ? "Sin permiso de ubicación. Actívalo en los ajustes del teléfono." : "No se ha podido obtener la posición.", "warn");
+  }, { enableHighAccuracy: true, maximumAge: 5000, timeout: 30000 });
+};
+
+// Recupera un borrador sin guardar
+try {
+  const d = JSON.parse(localStorage.getItem(KEY + ":draft") || "null");
+  if (d && Array.isArray(d.path) && Array.isArray(d.fitas) && d.fitas.length === N && JSON.stringify(d) !== JSON.stringify({ path, fitas })) {
+    path = d.path; fitas = d.fitas; status("Recuperado tu último borrador sin guardar.");
+  }
+} catch (e) {}
+render();
+</script>
+</body>
+</html>

@@ -119,6 +119,8 @@ header { display: grid; gap: 18px; }
 .map-note { font-size: .82rem; color: var(--muted); }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .85rem; color: var(--muted); }
 .legend i { display: inline-block; width: 22px; height: 5px; border-radius: 3px; vertical-align: middle; margin-right: 6px; }
+.linkbtn { all: unset; cursor: pointer; color: var(--accent); text-decoration: underline; }
+.linkbtn:focus-visible { outline: 3px solid var(--shell); }
 .geo { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
 .geo-msg { font-size: .92rem; color: var(--ink); min-width: 0; flex: 1 1 220px; }
 
@@ -244,6 +246,7 @@ header { display: grid; gap: 18px; }
     <div class="stats" id="stats"></div>
     <div class="actions">
       <a class="btn" id="gmaps" href="#" target="_blank" rel="noopener">Abrir este recorrido a pie en Google Maps ↗</a>
+      <a class="btn ghost needs-files" href="editor.html">Marcar la anada en el mapa</a>
       <a class="btn ghost" href="#itinerari">Itinerario oficial</a>
       <a class="btn ghost" href="#ficha">Diseño de las placas</a>
     </div>
@@ -257,6 +260,7 @@ header { display: grid; gap: 18px; }
         <span><i style="background:var(--tornada-bg)"></i>Tornada</span>
       </div>
       <p class="map-note">Trazado esquemático a escala aproximada: los kilómetros se miden sobre estas líneas simplificadas. Toca un número para ver su placa; las fitas del casco antiguo están en el recuadro ampliado.</p>
+      <p class="map-note" id="custom-note" hidden>Estás viendo tu propio trazado de la anada, guardado en este dispositivo. <a href="editor.html">Editarlo</a> · <button type="button" class="linkbtn" id="custom-reset">Volver al original</button></p>
       <div class="geo">
         <button type="button" class="btn ghost" id="geo-btn">Mostrar mi posición</button>
         <p class="geo-msg" id="geo-msg" aria-live="polite"></p>
@@ -461,6 +465,16 @@ function hav(a, b) {
 }
 const fmt = km => km.toLocaleString("es-ES", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const pad = n => String(n).padStart(2, "0");
+// Trazado de la anada marcado a mano en editor.html (guardado en este dispositivo)
+let CUSTOM = false;
+try {
+  const saved = JSON.parse(localStorage.getItem("camino-magdalena:anada") || "null");
+  const a = ROUTES.anada;
+  if (saved && Array.isArray(saved.path) && saved.path.length > 1 && Array.isArray(saved.fitas) && saved.fitas.length === a.stops.length &&
+      saved.fitas.every((v, i, f) => Number.isInteger(v) && v >= 0 && v < saved.path.length && (i === 0 || v > f[i - 1]))) {
+    a.path = saved.path; a.stops.forEach((s, i) => { s.at = saved.fitas[i]; }); CUSTOM = true;
+  }
+} catch (e) {}
 for (const key in ROUTES) {
   const r = ROUTES[key];
   r.key = key;
@@ -735,6 +749,14 @@ geoBtn.addEventListener("click", () => {
       : "No se ha podido obtener tu posición. Prueba al aire libre."),
     { enableHighAccuracy: true, maximumAge: 10000, timeout: 30000 });
 });
+
+if (CUSTOM) {
+  document.getElementById("custom-note").hidden = false;
+  document.getElementById("custom-reset").addEventListener("click", () => {
+    try { localStorage.removeItem("camino-magdalena:anada"); } catch (e) {}
+    location.reload();
+  });
+}
 
 // Ruta inicial: la del enlace (#anada / #tornada) o la anada
 setRoute(location.hash === "#tornada" ? "tornada" : "anada", true);
