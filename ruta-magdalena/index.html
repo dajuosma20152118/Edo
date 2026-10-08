@@ -684,8 +684,18 @@ function plaqueHTML(r, s) {
 const LOGO_NAMES = { ajuntament: "Ajuntament de Castelló", junta: "Junta de Festes" };
 const LOGOS = {};
 for (const k in LOGO_NAMES) { try { LOGOS[k] = localStorage.getItem("camino-magdalena:logo-" + k); } catch (e) { LOGOS[k] = null; } }
+// Anagramas fijos del repositorio: logos/ajuntament.(png|svg) y logos/junta.(png|svg)
+const FILE_LOGOS = {};
 function logoSlot(k) {
-  return LOGOS[k] ? `<img src="${LOGOS[k]}" alt="Anagrama ${LOGO_NAMES[k]}">` : `<span class="pl-slot">Anagrama<br>${LOGO_NAMES[k]}</span>`;
+  const src = LOGOS[k] || FILE_LOGOS[k];
+  return src ? `<img src="${src}" alt="Anagrama ${LOGO_NAMES[k]}">` : `<span class="pl-slot">Anagrama<br>${LOGO_NAMES[k]}</span>`;
+}
+function findFileLogo(k, exts) {
+  if (!exts.length) return;
+  const img = new Image(), src = `logos/${k}.${exts[0]}`;
+  img.onload = () => { FILE_LOGOS[k] = src; if (typeof refreshPlaques === "function") refreshPlaques(); };
+  img.onerror = () => findFileLogo(k, exts.slice(1));
+  img.src = src;
 }
 
 // ---------- Estado: ruta activa y fita seleccionada ----------
@@ -796,6 +806,7 @@ function readLogo(file) {
     fr.readAsDataURL(file);
   });
 }
+for (const k in LOGO_NAMES) findFileLogo(k, ["png", "svg"]);
 const logoMsg = document.getElementById("logo-msg");
 document.querySelectorAll("[data-logo]").forEach(input => input.addEventListener("change", async () => {
   const k = input.dataset.logo, file = input.files && input.files[0];
