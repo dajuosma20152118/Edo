@@ -142,26 +142,31 @@ header { display: grid; gap: 18px; }
   background: var(--pbg); color: var(--plaque-fg);
   border-radius: 3.6cqw; box-shadow: 0 0 0 1.2cqw var(--pedge), 0 10px 24px rgb(0 0 0 / .18);
   display: flex; flex-direction: column; align-items: center; text-align: center;
-  padding: 7cqw 7cqw 6cqw;
+  padding: 6.4cqw 7cqw 5.6cqw;
   font-family: var(--f-sign);
 }
 .plaque[data-route="tornada"] { --pbg: var(--tornada-bg); --pedge: var(--tornada-edge); }
+.plaque > * { flex-shrink: 0; }
 .plaque::before { content: ""; position: absolute; inset: 2.6cqw; border: .8cqw solid rgb(255 255 255 / .85); border-radius: 2.4cqw; pointer-events: none; }
 .pl-head { font-weight: 700; font-size: 4.4cqw; letter-spacing: .16em; line-height: 1.2; }
 .pl-dir { margin-top: 1.6cqw; padding: .5cqw 3cqw; border-radius: 1cqw; background: var(--shell); color: var(--pedge); font-weight: 800; font-size: 4cqw; letter-spacing: .18em; }
-.pl-art { display: flex; align-items: flex-end; justify-content: center; gap: 1.5cqw; height: 36cqw; margin-top: 3cqw; width: 100%; }
+.pl-art { display: flex; align-items: flex-end; justify-content: center; gap: 2cqw; height: 29cqw; margin-top: 2.4cqw; width: 100%; }
 .pl-art svg { height: 100%; width: auto; flex: none; }
-.pl-art .pl-ermita { height: 30cqw; }
-.pl-num { margin-top: 2.4cqw; font-weight: 800; font-size: 5.6cqw; letter-spacing: .1em; color: var(--shell); }
-.pl-name { font-weight: 800; font-size: 8.6cqw; line-height: 1.05; margin-top: 1cqw; min-height: 2.1em; display: flex; align-items: center; justify-content: center; text-wrap: balance; }
-.pl-rule { width: 80%; height: .8cqw; background: var(--plaque-fg); opacity: .85; margin-block: 2.6cqw 2cqw; }
+.pl-art .pl-ermita { height: 24cqw; }
+.pl-art .pl-lledo { height: 23cqw; }
+.pl-frieze { display: flex; align-items: flex-end; justify-content: center; gap: 3cqw; height: 15cqw; margin-top: 2cqw; }
+.pl-frieze svg { height: 100%; width: auto; flex: none; }
+.pl-frieze .pl-colla { height: 14cqw; }
+.pl-num { margin-top: 2cqw; font-weight: 800; font-size: 5.6cqw; letter-spacing: .1em; color: var(--shell); }
+.pl-name { font-weight: 800; font-size: 8cqw; line-height: 1.05; margin-top: .6cqw; min-height: 2.1em; display: flex; align-items: center; justify-content: center; text-wrap: balance; }
+.pl-rule { width: 80%; height: .8cqw; background: var(--plaque-fg); opacity: .85; margin-block: 2.2cqw 1.8cqw; }
 .pl-km { display: flex; justify-content: center; flex-wrap: wrap; gap: .5cqw 5cqw; font-weight: 700; font-size: 5.2cqw; font-variant-numeric: tabular-nums; }
 .pl-km em { font-style: normal; color: var(--shell); }
 .pl-next { margin-top: 1.6cqw; max-width: 92%; font-weight: 500; font-size: 3.8cqw; line-height: 1.25; }
 .pl-logos {
-  position: relative; z-index: 1; margin-top: auto; width: 100%;
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto 15cqw; gap: 1.2cqw 3cqw;
-  padding: 2cqw 3cqw 2.4cqw; border-radius: 1.8cqw; background: #FFFFFF; color: var(--pedge);
+  position: relative; z-index: 1; margin-top: 2.4cqw; width: 100%;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto 14cqw; gap: 1cqw 3cqw;
+  padding: 1.8cqw 3cqw 2.2cqw; border-radius: 1.8cqw; background: #FFFFFF; color: var(--pedge);
 }
 .pl-foot { grid-column: 1 / -1; font-weight: 800; font-size: 3.4cqw; letter-spacing: .14em; line-height: 1.2; }
 .pl-logo { height: 100%; display: flex; align-items: center; justify-content: center; min-width: 0; }
@@ -326,7 +331,7 @@ header { display: grid; gap: 18px; }
       <dl>
         <dt>Formato</dt><dd>20 × 30 cm, vertical, esquinas redondeadas.</dd>
         <dt>Material</dt><dd>Azulejo de cerámica esmaltada de Castelló en fachadas; chapa vitrificada sobre mojón o poste en los caminos de huerta.</dd>
-        <dt>Colores</dt><dd>Anada en azul esmalte y tornada en verde, con los dibujos y el número en amarillo: una gaiata encendida, la Ermita de la Magdalena y la canya con su cinta verde. Franja inferior blanca para los anagramas.</dd>
+        <dt>Colores</dt><dd>Anada en azul esmalte y tornada en verde, con los dibujos y el número en amarillo: arriba el Fadrí, la Ermita de la Magdalena y la Basílica del Lledó; abajo un friso con la gaiata, la colla de dolçaina i tabal y la canya con su cinta verde. Franja inferior blanca para los anagramas.</dd>
         <dt>Contenido</dt><dd>Sentido (ANADA o TORNADA), número de fita, nombre del lugar, km recorridos, km que faltan hasta la meta y siguiente punto. Abajo, los anagramas del Ajuntament de Castelló y de la Junta de Festes, unos 3 cm de alto.</dd>
         <dt>Kilometraje</dt><dd>Orientativo: medir con GPS sobre el terreno antes de fabricar las placas.</dd>
         <dt>Idioma</dt><dd>Valenciano, con la toponimia del itinerario oficial.</dd>
@@ -673,15 +678,20 @@ function plaqueHTML(r, s) {
     <div class="pl-head">CAMÍ DE LA MAGDALENA</div>
     <div class="pl-dir">${r.dir}</div>
     <div class="pl-art" aria-hidden="true">
-      <svg viewBox="0 0 40 100">${gaiataSVG("var(--shell)")}</svg>
+      <svg viewBox="0 0 30 100">${fadriSVG("var(--shell)")}</svg>
       <svg class="pl-ermita" viewBox="0 20 100 80">${ermitaSVG("var(--shell)")}</svg>
-      <svg viewBox="0 0 40 100">${canyaSVG("var(--shell)")}</svg>
+      <svg class="pl-lledo" viewBox="0 26 62 74">${lledoSVG("var(--shell)")}</svg>
     </div>
     <div class="pl-num">FITA ${pad(s.n)}</div>
     <div class="pl-name">${s.plate}</div>
     <div class="pl-rule"></div>
     <div class="pl-km"><span>km ${fmt(s.km)}</span><em>${s.left > 0.05 ? "falten " + fmt(s.left) + " km" : "meta"}</em></div>
     <div class="pl-next">${nextLine}</div>
+    <div class="pl-frieze" aria-hidden="true">
+      <svg viewBox="0 0 40 100">${gaiataSVG("var(--shell)")}</svg>
+      <svg class="pl-colla" viewBox="0 0 84 60">${collaSVG("var(--shell)")}</svg>
+      <svg viewBox="0 0 40 100">${canyaSVG("var(--shell)")}</svg>
+    </div>
     <div class="pl-logos">
       <div class="pl-foot">ROMERIA DE LES CANYES</div>
       <div class="pl-logo">${logoSlot("ajuntament")}</div>
@@ -690,6 +700,75 @@ function plaqueHTML(r, s) {
   </div>`;
 }
 
+// El Fadrí: campanario octogonal exento, con el cuerpo de campanas y el templete
+function fadriSVG(color, hole = "var(--pbg)") {
+  const f = `style="fill:${color}"`, h = `style="fill:${hole}"`;
+  const ln = `style="stroke:${hole}" stroke-width="1"`;
+  return `
+    <rect x="7.5" y="88" width="15" height="11.5" ${f}/>
+    <rect x="9" y="30" width="12" height="59" ${f}/>
+    <line x1="12.6" y1="31" x2="12.6" y2="98" ${ln}/><line x1="17.4" y1="31" x2="17.4" y2="98" ${ln}/>
+    <rect x="8.2" y="59" width="13.6" height="2" ${f}/><rect x="8.2" y="45" width="13.6" height="2" ${f}/>
+    <line x1="8" y1="61.5" x2="22" y2="61.5" ${ln}/><line x1="8" y1="47.5" x2="22" y2="47.5" ${ln}/>
+    <rect x="7" y="28" width="16" height="2.8" ${f}/>
+    <path d="M10.4 43 V35.5 A1.5 1.5 0 0 1 13.4 35.5 V43 Z" ${h}/>
+    <path d="M16.6 43 V35.5 A1.5 1.5 0 0 1 19.6 35.5 V43 Z" ${h}/>
+    <rect x="12.6" y="72" width="1.6" height="4" ${h}/><rect x="15.8" y="72" width="1.6" height="4" ${h}/>
+    <rect x="10.5" y="20.5" width="9" height="7.5" ${f}/>
+    <path d="M13.6 27 V23.5 A1.4 1.4 0 0 1 16.4 23.5 V27 Z" ${h}/>
+    <path d="M9.6 21 Q15 12.5 20.4 21 Z" ${f}/>
+    <rect x="14.4" y="5" width="1.2" height="10" ${f}/>
+    <path d="M15.6 6 L20 7.4 L15.6 8.8 Z" ${f}/>`;
+}
+// Basílica del Lledó: fachada con frontón curvo, cúpula con linterna y campanario
+function lledoSVG(color, hole = "var(--pbg)") {
+  const f = `style="fill:${color}"`, h = `style="fill:${hole}"`;
+  const fs = `style="fill:${color};stroke:${hole}" stroke-width="1.1" stroke-linejoin="round"`;
+  return `
+    <path d="M22 60 Q31 41 40 60 Z" ${f}/>
+    <rect x="29.9" y="38.5" width="2.2" height="6" ${f}/>
+    <rect x="30.5" y="33" width="1" height="6" ${f}/><rect x="29" y="34.6" width="4" height="1" ${f}/>
+    <path d="M4 99.5 V77 L17 72 V99.5 Z" ${fs}/>
+    <path d="M17 99.5 V61 H45 V99.5 Z" ${fs}/>
+    <path d="M15.5 62 Q31 44 46.5 62 Z" ${fs}/>
+    <circle cx="31" cy="67.5" r="3" ${h}/>
+    <path d="M27 99.5 V86 A4 4 0 0 1 35 86 V99.5 Z" ${h}/>
+    <rect x="20" y="80" width="3" height="6" ${h}/><rect x="39" y="80" width="3" height="6" ${h}/>
+    <path d="M45 99.5 V44 H57 V99.5 Z" ${fs}/>
+    <path d="M43.8 44.6 L51 34 L58.2 44.6 Z" ${fs}/>
+    <rect x="50.5" y="27" width="1" height="7.5" ${f}/><rect x="49" y="29" width="4" height="1" ${f}/>
+    <path d="M48.8 56 V49.5 A2.2 2.2 0 0 1 53.2 49.5 V56 Z" ${h}/>
+    <rect x="49.5" y="66" width="3" height="5" ${h}/>`;
+}
+// Colla de dolçaina i tabal, con mocador al cap
+function collaSVG(color, hole = "var(--pbg)") {
+  const f = `style="fill:${color}"`, h = `style="fill:${hole}"`;
+  const arm = `fill="none" style="stroke:${color}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"`;
+  const stick = `style="stroke:${color}" stroke-width="1.4" stroke-linecap="round"`;
+  const person = (x) => `
+    <circle cx="${x}" cy="12" r="5" ${f}/>
+    <path d="M${x - 5.6} 11 Q${x} 3.6 ${x + 5.6} 11 Z" ${f}/>
+    <path d="M${x - 5} 9.5 L${x - 9} 13 L${x - 5.5} 12.6 Z" ${f}/>
+    <line x1="${x - 5.4}" y1="10.6" x2="${x + 5.4}" y2="10.6" style="stroke:${hole}" stroke-width=".9"/>
+    <path d="M${x - 6.5} 20.5 Q${x} 17.5 ${x + 6.5} 20.5 L${x + 8} 39 H${x - 8} Z" ${f}/>
+    <path d="M${x - 2.4} 19 L${x} 24 L${x + 2.4} 19 Z" ${h}/>
+    <rect x="${x - 6}" y="39" width="4.6" height="19" rx="1" ${f}/>
+    <rect x="${x + 1.4}" y="39" width="4.6" height="19" rx="1" ${f}/>`;
+  return `
+    ${person(16)}
+    <path d="M20 14.5 L35 23.5 L38.5 28.5 L32.2 26.6 L19.2 17 Z" ${f}/>
+    <path d="M20.5 22 L27 21" ${arm}/><path d="M22 26 L31 24.5" ${arm}/>
+    <circle cx="25" cy="18.9" r=".7" ${h}/><circle cx="28" cy="20.6" r=".7" ${h}/><circle cx="31" cy="22.4" r=".7" ${h}/>
+    ${person(62)}
+    <rect x="53" y="27" width="18" height="10" rx="2" ${f}/>
+    <path d="M54.5 28.5 L58.5 35.5 L62.5 28.5 L66.5 35.5 L70 29" fill="none" style="stroke:${hole}" stroke-width=".9"/>
+    <path d="M56 22.5 L54 26" ${arm}/><path d="M68 22.5 L70 26" ${arm}/>
+    <line x1="55" y1="25" x2="49" y2="15" ${stick}/><circle cx="48.6" cy="14.4" r="1.3" ${f}/>
+    <line x1="69" y1="25" x2="75" y2="15" ${stick}/><circle cx="75.4" cy="14.4" r="1.3" ${f}/>
+    <ellipse cx="41" cy="11" rx="1.8" ry="1.3" ${f}/><rect x="42.2" y="2.5" width=".8" height="8.6" ${f}/>
+    <path d="M42.6 2.5 Q46 4 45.4 7 Q44.6 5 42.6 4.6 Z" ${f}/>
+    <ellipse cx="80" cy="30" rx="1.6" ry="1.2" ${f}/><rect x="81" y="22.5" width=".8" height="7.6" ${f}/>`;
+}
 // Gaiata encendida: peana, pie con volutas y llums, y el fanal en lo alto
 function gaiataSVG(color, hole = "var(--pbg)") {
   const f = `style="fill:${color}"`, h = `style="fill:${hole}"`;
