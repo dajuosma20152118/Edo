@@ -126,7 +126,7 @@ header { display: grid; gap: 18px; }
 
 .side { display: grid; gap: 24px; min-width: 0; }
 .plaque-stage { display: grid; gap: 18px; align-items: start; }
-.plaque-stage .plaque-box { max-width: 480px; }
+.plaque-stage .plaque-box { max-width: 340px; }
 .stage-text { display: grid; gap: 10px; min-width: 0; }
 .stage-text .kicker { font: 700 .8rem/1 var(--f-sign); letter-spacing: .1em; text-transform: uppercase; color: var(--route); }
 :root[data-theme="dark"] .stage-text .kicker { color: var(--shell); }
@@ -135,43 +135,40 @@ header { display: grid; gap: 18px; }
 
 /* ---------- La placa ---------- */
 .plaque-box { container-type: inline-size; width: 100%; }
-/* 30 × 20 cm: 1cqw = 3 mm de la placa real */
+/* 20 × 30 cm en vertical: 1cqw = 2 mm de la placa real */
 .plaque {
-  --pbg: var(--anada-bg); --pedge: var(--anada-edge); --pribbon: #2E8B4E;
-  position: relative; overflow: hidden; aspect-ratio: 3 / 2; max-width: 100%;
+  --pbg: var(--anada-bg); --pedge: var(--anada-edge);
+  position: relative; overflow: hidden; aspect-ratio: 2 / 3; max-width: 100%;
   background: var(--pbg); color: var(--plaque-fg);
-  border-radius: 2.6cqw; box-shadow: 0 0 0 .8cqw var(--pedge), 0 10px 24px rgb(0 0 0 / .18);
-  display: grid; grid-template-columns: 26cqw minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto;
-  grid-template-areas: "side head" "side main" "logos logos";
-  column-gap: 3cqw; padding: 4.2cqw 4.6cqw 3.6cqw;
+  border-radius: 3.6cqw; box-shadow: 0 0 0 1.2cqw var(--pedge), 0 10px 24px rgb(0 0 0 / .18);
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding: 7cqw 7cqw 6cqw;
   font-family: var(--f-sign);
 }
-.plaque[data-route="tornada"] { --pbg: var(--tornada-bg); --pedge: var(--tornada-edge); --pribbon: #1E4C93; }
-.plaque::before { content: ""; position: absolute; inset: 1.8cqw; border: .5cqw solid rgb(255 255 255 / .85); border-radius: 1.6cqw; pointer-events: none; }
-.pl-side { grid-area: side; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1cqw; text-align: center; }
-.pl-dir { padding: .4cqw 1.8cqw; border-radius: .8cqw; background: var(--shell); color: var(--pedge); font-weight: 800; font-size: 2.8cqw; letter-spacing: .16em; }
-.pl-shell { width: 24cqw; }
-.pl-num { font-weight: 800; font-size: 3.6cqw; letter-spacing: .1em; color: var(--shell); }
-.pl-head { grid-area: head; font-weight: 700; font-size: 2.7cqw; letter-spacing: .18em; }
-.pl-main { grid-area: main; display: flex; flex-direction: column; justify-content: center; min-width: 0; padding-right: 4cqw; }
-.pl-name { font-weight: 800; font-size: 6cqw; line-height: 1.05; text-wrap: balance; }
-.pl-rule { width: 100%; height: .5cqw; background: var(--plaque-fg); opacity: .85; margin-block: 2cqw 1.6cqw; }
-.pl-km { display: flex; flex-wrap: wrap; gap: .5cqw 4cqw; font-weight: 700; font-size: 3.6cqw; font-variant-numeric: tabular-nums; }
+.plaque[data-route="tornada"] { --pbg: var(--tornada-bg); --pedge: var(--tornada-edge); }
+.plaque::before { content: ""; position: absolute; inset: 2.6cqw; border: .8cqw solid rgb(255 255 255 / .85); border-radius: 2.4cqw; pointer-events: none; }
+.pl-head { font-weight: 700; font-size: 4.4cqw; letter-spacing: .16em; line-height: 1.2; }
+.pl-dir { margin-top: 1.6cqw; padding: .5cqw 3cqw; border-radius: 1cqw; background: var(--shell); color: var(--pedge); font-weight: 800; font-size: 4cqw; letter-spacing: .18em; }
+.pl-art { display: flex; align-items: flex-end; justify-content: center; gap: 1.5cqw; height: 36cqw; margin-top: 3cqw; width: 100%; }
+.pl-art svg { height: 100%; width: auto; flex: none; }
+.pl-art .pl-ermita { height: 30cqw; }
+.pl-num { margin-top: 2.4cqw; font-weight: 800; font-size: 5.6cqw; letter-spacing: .1em; color: var(--shell); }
+.pl-name { font-weight: 800; font-size: 8.6cqw; line-height: 1.05; margin-top: 1cqw; min-height: 2.1em; display: flex; align-items: center; justify-content: center; text-wrap: balance; }
+.pl-rule { width: 80%; height: .8cqw; background: var(--plaque-fg); opacity: .85; margin-block: 2.6cqw 2cqw; }
+.pl-km { display: flex; justify-content: center; flex-wrap: wrap; gap: .5cqw 5cqw; font-weight: 700; font-size: 5.2cqw; font-variant-numeric: tabular-nums; }
 .pl-km em { font-style: normal; color: var(--shell); }
-.pl-next { margin-top: 1.2cqw; font-weight: 500; font-size: 2.6cqw; line-height: 1.25; }
+.pl-next { margin-top: 1.6cqw; max-width: 92%; font-weight: 500; font-size: 3.8cqw; line-height: 1.25; }
 .pl-logos {
-  grid-area: logos; position: relative; z-index: 1; margin-top: 2.4cqw; height: 12cqw;
-  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 2cqw;
-  padding: 1.2cqw 2cqw; border-radius: 1.2cqw; background: #FFFFFF; color: var(--pedge);
+  position: relative; z-index: 1; margin-top: auto; width: 100%;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto 15cqw; gap: 1.2cqw 3cqw;
+  padding: 2cqw 3cqw 2.4cqw; border-radius: 1.8cqw; background: #FFFFFF; color: var(--pedge);
 }
-.pl-logo { height: 9.6cqw; display: flex; align-items: center; min-width: 0; }
-.pl-logo.r { justify-content: flex-end; }
+.pl-foot { grid-column: 1 / -1; font-weight: 800; font-size: 3.4cqw; letter-spacing: .14em; line-height: 1.2; }
+.pl-logo { height: 100%; display: flex; align-items: center; justify-content: center; min-width: 0; }
 .pl-logo img { max-height: 100%; max-width: 100%; object-fit: contain; }
-.pl-slot { height: 100%; width: 22cqw; max-width: 100%; display: grid; place-items: center; text-align: center; padding: .5cqw 1cqw;
-  border: .35cqw dashed color-mix(in srgb, var(--pedge) 55%, transparent); border-radius: .8cqw;
-  font-size: 1.7cqw; font-weight: 700; line-height: 1.15; color: color-mix(in srgb, var(--pedge) 75%, transparent); }
-.pl-foot { font-weight: 800; font-size: 2.3cqw; letter-spacing: .12em; text-align: center; line-height: 1.2; }
-.pl-ribbon { position: absolute; right: -9cqw; top: 5cqw; width: 34cqw; height: 3cqw; background: var(--pribbon); transform: rotate(38deg); box-shadow: 0 0 0 .4cqw rgb(255 255 255 / .9); }
+.pl-slot { height: 100%; width: 100%; display: grid; place-items: center; text-align: center; padding: .5cqw 1cqw;
+  border: .5cqw dashed color-mix(in srgb, var(--pedge) 55%, transparent); border-radius: 1cqw;
+  font-size: 2.6cqw; font-weight: 700; line-height: 1.15; color: color-mix(in srgb, var(--pedge) 75%, transparent); }
 
 /* ---------- Lista de fitas ---------- */
 .stops { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
@@ -209,7 +206,7 @@ header { display: grid; gap: 18px; }
 .spec dt { font: 700 .8rem/1.6 var(--f-sign); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .spec dd { margin: 0; }
 .pair { display: flex; flex-wrap: wrap; gap: 20px; }
-.pair .plaque-box { width: min(100%, 300px); }
+.pair .plaque-box { width: min(100%, 230px); }
 .logos-up { display: grid; gap: 8px; }
 .logos-up .row { display: flex; flex-wrap: wrap; gap: 8px; }
 .logo-msg { font-size: .9rem; color: var(--muted); }
@@ -256,7 +253,7 @@ header { display: grid; gap: 18px; }
   <header>
     <span class="eyebrow">Romeria de les Canyes · Itinerari oficial</span>
     <h1>Camí de la Magdalena</h1>
-    <p class="lede">El recorrido oficial de la Romeria señalizado como el Camino de Santiago. La anada sube de la Plaça Vella a la Ermita de la Magdalena y la tornada vuelve por el Caminàs y el Lledó hasta la Plaça Major. Cada punto de paso obligatorio lleva su placa con la silueta de la ermita: azul en la anada y verde en la tornada.</p>
+    <p class="lede">El recorrido oficial de la Romeria señalizado como el Camino de Santiago. La anada sube de la Plaça Vella a la Ermita de la Magdalena y la tornada vuelve por el Caminàs y el Lledó hasta la Plaça Major. Cada punto de paso obligatorio lleva su placa con dibujos de la Magdalena: azul en la anada y verde en la tornada.</p>
     <div class="tabs" role="tablist" aria-label="Sentido del recorrido">
       <button class="tab" role="tab" id="tab-anada" data-route="anada" aria-selected="true"><b>Anada</b><span>Plaça Major → Magdalena</span></button>
       <button class="tab" role="tab" id="tab-tornada" data-route="tornada" aria-selected="false"><b>Tornada</b><span>Magdalena → Plaça Major</span></button>
@@ -327,9 +324,9 @@ header { display: grid; gap: 18px; }
         <p class="logo-msg" id="logo-msg" aria-live="polite"></p>
       </div>
       <dl>
-        <dt>Formato</dt><dd>Máximo 30 × 20 cm, horizontal, esquinas redondeadas.</dd>
+        <dt>Formato</dt><dd>20 × 30 cm, vertical, esquinas redondeadas.</dd>
         <dt>Material</dt><dd>Azulejo de cerámica esmaltada de Castelló en fachadas; chapa vitrificada sobre mojón o poste en los caminos de huerta.</dd>
-        <dt>Colores</dt><dd>Anada en azul esmalte y tornada en verde, con la silueta de la Ermita de la Magdalena y el número en amarillo jacobeo y una cinta en la esquina. Franja inferior blanca para los anagramas.</dd>
+        <dt>Colores</dt><dd>Anada en azul esmalte y tornada en verde, con los dibujos y el número en amarillo: una gaiata encendida, la Ermita de la Magdalena y la canya con su cinta verde. Franja inferior blanca para los anagramas.</dd>
         <dt>Contenido</dt><dd>Sentido (ANADA o TORNADA), número de fita, nombre del lugar, km recorridos, km que faltan hasta la meta y siguiente punto. Abajo, los anagramas del Ajuntament de Castelló y de la Junta de Festes, unos 3 cm de alto.</dd>
         <dt>Kilometraje</dt><dd>Orientativo: medir con GPS sobre el terreno antes de fabricar las placas.</dd>
         <dt>Idioma</dt><dd>Valenciano, con la toponimia del itinerario oficial.</dd>
@@ -673,25 +670,67 @@ function plaqueHTML(r, s) {
   const next = r.stops[s.n];
   const nextLine = next ? `▸ Pròxima: ${next.plate} · ${fmt(next.km - s.km)} km` : (r.key === "anada" ? "Final de l'anada · Benvinguts" : "Final de la tornada · Bona Magdalena");
   return `<div class="plaque" data-route="${r.key}" role="img" aria-label="Placa de ${r.label.toLowerCase()} ${s.n}: ${s.plate}">
-    <div class="pl-side">
-      <div class="pl-dir">${r.dir}</div>
-      <svg class="pl-shell" viewBox="0 20 100 80" aria-hidden="true">${ermitaSVG("var(--shell)")}</svg>
-      <div class="pl-num">FITA ${pad(s.n)}</div>
-    </div>
     <div class="pl-head">CAMÍ DE LA MAGDALENA</div>
-    <div class="pl-main">
-      <div class="pl-name">${s.plate}</div>
-      <div class="pl-rule"></div>
-      <div class="pl-km"><span>km ${fmt(s.km)}</span><em>${s.left > 0.05 ? "falten " + fmt(s.left) + " km" : "meta"}</em></div>
-      <div class="pl-next">${nextLine}</div>
+    <div class="pl-dir">${r.dir}</div>
+    <div class="pl-art" aria-hidden="true">
+      <svg viewBox="0 0 40 100">${gaiataSVG("var(--shell)")}</svg>
+      <svg class="pl-ermita" viewBox="0 20 100 80">${ermitaSVG("var(--shell)")}</svg>
+      <svg viewBox="0 0 40 100">${canyaSVG("var(--shell)")}</svg>
     </div>
+    <div class="pl-num">FITA ${pad(s.n)}</div>
+    <div class="pl-name">${s.plate}</div>
+    <div class="pl-rule"></div>
+    <div class="pl-km"><span>km ${fmt(s.km)}</span><em>${s.left > 0.05 ? "falten " + fmt(s.left) + " km" : "meta"}</em></div>
+    <div class="pl-next">${nextLine}</div>
     <div class="pl-logos">
+      <div class="pl-foot">ROMERIA DE LES CANYES</div>
       <div class="pl-logo">${logoSlot("ajuntament")}</div>
-      <div class="pl-foot">ROMERIA DE<br>LES CANYES</div>
-      <div class="pl-logo r">${logoSlot("junta")}</div>
+      <div class="pl-logo">${logoSlot("junta")}</div>
     </div>
-    <div class="pl-ribbon"></div>
   </div>`;
+}
+
+// Gaiata encendida: peana, pie con volutas y llums, y el fanal en lo alto
+function gaiataSVG(color, hole = "var(--pbg)") {
+  const f = `style="fill:${color}"`, h = `style="fill:${hole}"`;
+  const st = `fill="none" style="stroke:${color}" stroke-width="2.4" stroke-linecap="round"`;
+  const ray = `style="stroke:${color}" stroke-width="1.2" stroke-linecap="round"`;
+  return `
+    <path d="M7 99 H33 L30 91 H10 Z" ${f}/>
+    <rect x="18" y="44" width="4" height="48" ${f}/>
+    <path d="M20 86 C10 86 5 78 9 72 C12 68 17 71 14.5 74.5" ${st}/>
+    <path d="M20 86 C30 86 35 78 31 72 C28 68 23 71 25.5 74.5" ${st}/>
+    <path d="M20 68 C13 68 9 61 12.5 56.5 C15 54 18.5 56.5 16.5 59" ${st}/>
+    <path d="M20 68 C27 68 31 61 27.5 56.5 C25 54 21.5 56.5 23.5 59" ${st}/>
+    <circle cx="9" cy="71.5" r="2.2" ${f}/><circle cx="31" cy="71.5" r="2.2" ${f}/>
+    <circle cx="12.5" cy="56" r="1.9" ${f}/><circle cx="27.5" cy="56" r="1.9" ${f}/>
+    <circle cx="20" cy="79" r="1.6" ${h}/><circle cx="20" cy="62" r="1.4" ${h}/>
+    <path d="M16 46 L24 46 L22.5 42 L17.5 42 Z" ${f}/>
+    <rect x="12.5" y="20" width="15" height="23" rx="2.5" ${f}/>
+    <rect x="15" y="23.5" width="4" height="15" rx="1" ${h}/><rect x="21" y="23.5" width="4" height="15" rx="1" ${h}/>
+    <path d="M11.5 21 Q20 9 28.5 21 Z" ${f}/>
+    <circle cx="20" cy="9" r="2" ${f}/>
+    <line x1="6" y1="31" x2="2" y2="31" ${ray}/><line x1="34" y1="31" x2="38" y2="31" ${ray}/>
+    <line x1="7" y1="21" x2="3.5" y2="18" ${ray}/><line x1="33" y1="21" x2="36.5" y2="18" ${ray}/>
+    <line x1="7" y1="41" x2="3.5" y2="44" ${ray}/><line x1="33" y1="41" x2="36.5" y2="44" ${ray}/>`;
+}
+// Canya de la Romeria con su cinta verde
+function canyaSVG(color, hole = "var(--pbg)") {
+  const f = `style="fill:${color}"`;
+  const node = `style="stroke:${hole}" stroke-width="1.2"`;
+  const rib = `style="fill:#2E8B4E;stroke:#FFFFFF" stroke-width=".9" stroke-linejoin="round"`;
+  return `
+    <path d="M18 99 L19 17 H21.4 L22.4 99 Z" ${f}/>
+    <line x1="17.5" y1="82" x2="23" y2="82" ${node}/><line x1="17.5" y1="65" x2="23" y2="65" ${node}/>
+    <line x1="17.5" y1="49" x2="23" y2="49" ${node}/><line x1="18" y1="27" x2="22.6" y2="27" ${node}/>
+    <path d="M20 19 C14 11 8 9 3 10 C9 13 14.5 16 19 21 Z" ${f}/>
+    <path d="M20.4 17.5 C24 7.5 30 4 36 3.5 C31 7.5 26 11.5 21.6 19 Z" ${f}/>
+    <path d="M20 17 C19 10 20 4.5 22.5 0.5 C22.4 6.5 22.2 11 21.4 17 Z" ${f}/>
+    <path d="M20.2 36 L13.5 50 L16.8 49.2 L21 38 Z" ${rib}/>
+    <path d="M20.6 36 L27.5 51.5 L24.2 50.6 L19.8 38 Z" ${rib}/>
+    <path d="M20.2 36 C12 29.5 7.5 33.5 11.5 37.8 C14 40.3 18 38.5 20.2 36 Z" ${rib}/>
+    <path d="M20.2 36 C28.4 29.5 32.9 33.5 28.9 37.8 C26.4 40.3 22.4 38.5 20.2 36 Z" ${rib}/>
+    <circle cx="20.2" cy="36" r="2.2" ${rib}/>`;
 }
 
 // ---------- Anagramas oficiales (los carga el usuario; se guardan en este dispositivo) ----------

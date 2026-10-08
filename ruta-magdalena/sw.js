@@ -1,5 +1,5 @@
 // Copia local de la app para usarla sin cobertura durante la ruta.
-const CACHE = "camino-magdalena-v6";
+const CACHE = "camino-magdalena-v7";
 const FILES = [
   "./", "index.html", "editor.html", "manifest.webmanifest", "ruta.gpx",
   "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png", "icons/apple-touch-icon.png"
