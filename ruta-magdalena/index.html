@@ -150,7 +150,7 @@ header { display: grid; gap: 18px; }
 .plaque::before { content: ""; position: absolute; inset: 1.8cqw; border: .5cqw solid rgb(255 255 255 / .85); border-radius: 1.6cqw; pointer-events: none; }
 .pl-side { grid-area: side; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1cqw; text-align: center; }
 .pl-dir { padding: .4cqw 1.8cqw; border-radius: .8cqw; background: var(--shell); color: var(--pedge); font-weight: 800; font-size: 2.8cqw; letter-spacing: .16em; }
-.pl-shell { width: 21cqw; }
+.pl-shell { width: 24cqw; }
 .pl-num { font-weight: 800; font-size: 3.6cqw; letter-spacing: .1em; color: var(--shell); }
 .pl-head { grid-area: head; font-weight: 700; font-size: 2.7cqw; letter-spacing: .18em; }
 .pl-main { grid-area: main; display: flex; flex-direction: column; justify-content: center; min-width: 0; padding-right: 4cqw; }
@@ -634,26 +634,40 @@ for (const key in ROUTES) {
 }
 
 // ---------- Placa ----------
-// Silueta de la Ermita de la Magdalena sobre el tossal: nave con tejado a dos aguas,
-// nave lateral más baja, campanario redondo y restos de muralla del Castell Vell.
+// Silueta de la Ermita de la Magdalena tal como se ve desde el camino: nave larga encalada
+// con tejado de teja, nave de la derecha, torre redonda con espadaña y bandera, pino detrás,
+// cipreses delante y el tossal con sus bancales de piedra seca.
 function ermitaSVG(color, hole = "var(--pbg)") {
   const f = `style="fill:${color}"`, h = `style="fill:${hole}"`;
+  const fs = `style="fill:${color};stroke:${hole}" stroke-width="1.3" stroke-linejoin="round"`;
+  const line = `fill="none" style="stroke:${hole}" stroke-width="1.5" stroke-linecap="round"`;
   return `
-    <path d="M0 96 C14 84 26 79 40 78 C56 77 72 79 86 86 C92 89 96 92 100 96 Z" ${f}/>
-    <path d="M6 79 h3 v-3 h3 v3 h3 v-3 h3 v3 h2 v6 h-14 Z" ${f}/>
-    <path d="M24 78 V60 h14 v18 Z" ${f}/>
-    <path d="M22 61 L38 54 V61 Z" ${f}/>
-    <path d="M36 78 V54 L50 42 L64 54 V78 Z" ${f}/>
-    <path d="M34 55 L50 40.5 L66 55 L64 56.5 L50 44 L36 56.5 Z" ${f}/>
-    <path d="M46 78 V69 A4 4 0 0 1 54 69 V78 Z" ${h}/>
-    <circle cx="50" cy="56" r="2.6" ${h}/>
-    <rect x="28" y="66" width="3" height="5" rx="1.5" ${h}/>
-    <path d="M64 78 V36 h14 V78 Z" ${f}/>
-    <path d="M63 37 A8 6 0 0 1 79 37 Z" ${f}/>
-    <rect x="70.2" y="22" width="1.6" height="9" ${f}/>
-    <rect x="67.5" y="24.5" width="7" height="1.6" ${f}/>
-    <path d="M68 50 V44 A3 3 0 0 1 74 44 V50 Z" ${h}/>
-    <path d="M79 79 V70 h3 v-3 h3 v3 h3 v-3 h3 v3 h2 v9 Z" ${f}/>`;
+    <path d="M0 99 V80 C10 76 22 74.5 36 74.5 H74 C84 75 93 77.5 100 81 V99 Z" ${f}/>
+    <path d="M4 85 C28 80.5 70 80.5 96 86.5" ${line}/>
+    <path d="M2 92.5 C30 88 70 88 98 94" ${line}/>
+    <path d="M35 37 C34 32 40 29.5 45 30.5 C48 26.5 55 26 58.5 28.5 C62 26 69 27.5 69.5 31.5 C73 33.5 70.5 37.5 65 37 C60 39 53 38.5 49 37.8 C44 39.5 36 40 35 37 Z" ${f}/>
+    <path d="M52.6 37 L55.2 37 L54.6 52 L52.4 52 Z" ${f}/>
+    <path d="M64 58 V38.6 Q72 36.4 80 38.6 V58 Z" ${fs}/>
+    <path d="M62.8 39 V35.8 Q72 33 81.2 35.8 V39 Q72 36.4 62.8 39 Z" ${fs}/>
+    <path d="M69 34.4 V28.5 Q72 25 75 28.5 V34.4 Z" ${fs}/>
+    <path d="M71 33.6 V31 A1 1 0 0 1 73 31 V33.6 Z" ${h}/>
+    <rect x="66.2" y="24" width=".9" height="11" ${f}/>
+    <path d="M67.1 24 H71.4 V27 H67.1 Z" ${f}/>
+    <rect x="75.5" y="44" width="2.2" height="3.4" ${h}/>
+    <path d="M8 74.5 V55 H54 V74.5 Z" ${fs}/>
+    <path d="M5.5 55.6 L9.5 50.2 H53.5 L56.5 55.6 Z" ${fs}/>
+    <path d="M53 74.5 V58 H84 V74.5 Z" ${fs}/>
+    <path d="M51 58.6 L54.5 53.6 H83 L86.5 58.6 Z" ${fs}/>
+    <rect x="15" y="60" width="4" height="5" ${h}/>
+    <rect x="27" y="59.5" width="4" height="5" ${h}/>
+    <rect x="41" y="60" width="4" height="5" ${h}/>
+    <rect x="72" y="62" width="4" height="5" ${h}/>
+    <rect x="62" y="63" width="3" height="4" ${h}/>
+    <path d="M2 74.5 V69 H8 V74.5 Z" ${fs}/>
+    <path d="M86 74.5 V70 H98 V75.8 Z" ${fs}/>
+    <path d="M34 48 C37 57 37.6 67 36.2 76 H31.8 C30.4 67 31 57 34 48 Z" ${fs}/>
+    <path d="M58.5 51 C61 59 61.4 68 60.3 76 H56.7 C55.6 68 56 59 58.5 51 Z" ${fs}/>
+    <path d="M62.6 57 C64.4 63 64.7 70 63.9 76 H61.3 C60.5 70 60.8 63 62.6 57 Z" ${fs}/>`;
 }
 function plaqueHTML(r, s) {
   const next = r.stops[s.n];
@@ -661,7 +675,7 @@ function plaqueHTML(r, s) {
   return `<div class="plaque" data-route="${r.key}" role="img" aria-label="Placa de ${r.label.toLowerCase()} ${s.n}: ${s.plate}">
     <div class="pl-side">
       <div class="pl-dir">${r.dir}</div>
-      <svg class="pl-shell" viewBox="0 0 100 100" aria-hidden="true">${ermitaSVG("var(--shell)")}</svg>
+      <svg class="pl-shell" viewBox="0 20 100 80" aria-hidden="true">${ermitaSVG("var(--shell)")}</svg>
       <div class="pl-num">FITA ${pad(s.n)}</div>
     </div>
     <div class="pl-head">CAMÍ DE LA MAGDALENA</div>
