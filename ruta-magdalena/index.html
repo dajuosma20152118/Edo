@@ -285,7 +285,7 @@ header { display: grid; gap: 18px; }
         <ol id="off-tornada"></ol>
       </div>
     </div>
-    <p class="note">Cada línea del itinerario oficial es un punto de paso obligatorio y lleva su placa. En la anada se añade la Ermita de Sant Roc de Canet, parada tradicional sobre el Caminàs, y la meta en la Ermita de la Magdalena. En los últimos años la Tornà entra por el Forn del Pla y sigue por Sanahuja y Maria Agustina; aquí se señaliza el recorrido histórico del documento.</p>
+    <p class="note">Cada línea es un punto de paso obligatorio y lleva su placa. En los últimos años la Tornà entra por el Forn del Pla y sigue por Sanahuja y Maria Agustina; aquí se señaliza el recorrido histórico del documento.</p>
   </section>
 
   <section class="spec" id="ficha">
@@ -329,7 +329,7 @@ header { display: grid; gap: 18px; }
     <ul>
       <li>La Romeria se celebra el tercer domingo de Cuaresma: misa de romeros a las 8:00 en la Concatedral y salida al terminar. La Tornà sale de la Magdalena por la tarde. Cualquier otro día los dos recorridos están libres.</li>
       <li>La única subida está al final de la anada, en el Tossal de la Magdalena (111 m). La tornada es casi toda en bajada o llana.</li>
-      <li>Cruza la N-340 y los caminos junto a la autopista solo por los pasos señalizados.</li>
+      <li>Cruza la carretera nacional y los caminos junto a la autopista solo por los pasos señalizados.</li>
       <li>Lleva agua: entre Sant Roc de Canet y la ermita no hay fuentes seguras.</li>
       <li>Si haces anada y tornada el mismo día, son unos 12 km en total.</li>
     </ul>
@@ -355,13 +355,12 @@ const ROUTES = {
     path: [
       [39.98645,-0.03805],[39.98631,-0.03725],[39.98670,-0.03640],[39.98700,-0.03561],[39.98770,-0.03510],
       [39.98848,-0.03453],[39.99050,-0.03420],[39.99250,-0.03390],[39.99480,-0.03360],[39.99650,-0.03330],
-      [39.99900,-0.03250],[40.00180,-0.03150],[40.00420,-0.03050],[40.00550,-0.02900],[40.00630,-0.02550],
-      [40.00680,-0.02180],[40.01000,-0.02190],[40.01350,-0.02210],[40.01694,-0.02250],[40.01920,-0.02080],
-      [40.02150,-0.01900],[40.02450,-0.01720],[40.02750,-0.01520],[40.02980,-0.01380],[40.03080,-0.01280],
-      [40.03167,-0.01167]
+      [40.00000,-0.03230],[40.00180,-0.03150],[40.00420,-0.03050],[40.00550,-0.02900],[40.00630,-0.02550],
+      [40.00680,-0.02180],[40.01000,-0.02190],[40.01350,-0.02210],[40.01694,-0.02250],[40.01950,-0.02050],
+      [40.02200,-0.01800],[40.02450,-0.01600],[40.02700,-0.01450],[40.02950,-0.01300],[40.03167,-0.01167]
     ],
     stops: [
-      { at: 0, plate: "Plaça Vella", name: "Plaça Vella (Major) · Ajuntament", tag: "Eixida",
+      { at: 0, plate: "Plaça Major", name: "Plaça Major · Ajuntament", tag: "Eixida",
         text: "Salida de la Romeria. Tras la misa de romeros en la Concatedral, la comitiva arranca con la canya y su cinta verde, que se reparte en el Mercat Central.",
         see: ["Ajuntament", "El Fadrí", "Concatedral de Santa Maria", "Mercat Central"] },
       { at: 1, plate: "Plaça de l'Herba", name: "Plaça de l'Herba", tag: "Casc antic",
@@ -369,31 +368,34 @@ const ROUTES = {
       { at: 2, plate: "Carrer de Colom", name: "Carrer de Colom", tag: "Casc antic",
         text: "Enlaza la plaça de l'Herba con el carrer Major.", see: [] },
       { at: 4, plate: "Carrer Major", name: "Carrer Major", tag: "Casc antic",
-        text: "El eje de la villa medieval. La Romeria lo recorre hacia el norte hasta el Toll.", see: [] },
-      { at: 5, plate: "Plaça del Toll", name: "Plaça del Toll (Maria Agustina)", tag: "Casc antic",
+        text: "El eje de la villa medieval. La Romeria lo recorre hacia el norte hasta la plaça de Maria Agustina.", see: [] },
+      { at: 5, plate: "Plaça Maria Agustina", name: "Plaça de Maria Agustina (el Toll)", tag: "Casc antic",
         text: "La antigua plaça del Toll, junto a la línea de la muralla medieval. Desde aquí sale la avinguda dels Caputxins.", see: [] },
-      { at: 7, plate: "Av. dels Caputxins", name: "Avinguda dels Caputxins", tag: "Eixida de la ciutat",
-        text: "Avenida recta hacia el norte que lleva hasta el límite de la ciudad.", see: [] },
-      { at: 9, plate: "Camí dels Molins", name: "Camí dels Molins · Primer Molí", tag: "Horta",
-        text: "Al llegar al Primer Molí se deja la ciudad. El camino acompaña a la Séquia Major entre huertas y antiguos molinos y cruza el Riu Sec.",
-        see: ["Séquia Major", "Riu Sec"] },
-      { at: 13, plate: "Camí de la Travessa", name: "Camí de la Travessa (Sangarró d'en Riera)", tag: "Horta",
-        text: "Tramo conocido como Sangarró d'en Riera, que enlaza el camí dels Molins con el Caminàs.", see: [] },
-      { at: 16, plate: "Caminàs", name: "Caminàs", tag: "Via romana",
+      { at: 7, plate: "Av. dels Caputxins", name: "Avinguda dels Caputxins · costat esquerre", tag: "Per la part esquerra",
+        text: "La Romeria sube la avenida por el lado izquierdo, la acera de poniente, hasta la plaça del Primer Molí.", see: [] },
+      { at: 9, plate: "Plaça del Primer Molí", name: "Plaça del Primer Molí", tag: "Eixida de la ciutat",
+        text: "Al final de Caputxins se deja la ciudad. Aquí empieza el camí dels Molins.", see: [] },
+      { at: 10, plate: "Camí dels Molins", name: "Camí dels Molins", tag: "Horta",
+        text: "El camino acompaña a la Séquia Major entre huertas y antiguos molinos y cruza el Riu Sec.", see: ["Séquia Major", "Riu Sec"] },
+      { at: 12, plate: "Plaça del Segon Molí", name: "Plaça del Segon Molí", tag: "Horta",
+        text: "Segundo molino del camino. Desde aquí se gira hacia el camí de la Travessera.", see: [] },
+      { at: 13, plate: "Camí de la Travessera", name: "Camí de la Travessera", tag: "Horta",
+        text: "También llamado camí de la Travessa o Sangarró d'en Riera. Enlaza el camí dels Molins con el Caminàs.", see: [] },
+      { at: 16, plate: "Caminàs", name: "Camí Caminàs", tag: "Via romana",
         text: "Antigua vía romana que cruza la Plana. Por este mismo camino baja por la tarde la Tornà.", see: ["Trazado de la Via Augusta"] },
-      { at: 18, plate: "Sant Roc de Canet", name: "Ermita de Sant Roc de Canet", tag: "Parada per esmorzar",
+      { at: 18, plate: "Parada a Sant Roc", name: "Parada a l'Ermita de Sant Roc de Canet", tag: "Parada per esmorzar",
         text: "Ermita de 1652, levantada tras las epidemias de la década de 1640. Parada tradicional para almorzar con higos secos y un vasito de vino dulce.",
         see: ["Ermita de Sant Roc (1652)"] },
-      { at: 20, plate: "Nacional València-Barcelona", name: "Nacional València-Barcelona (N-340)", tag: "Precaució",
-        text: "Único cruce con tráfico intenso de la anada. Pasa solo por el paso señalizado y en grupo.", see: [] },
-      { at: 22, plate: "Carretera del Desert", name: "Carretera del Desert de les Palmes", tag: "Peu del Tossal",
-        text: "La CV-147 lleva al pie del cerro. El día de la Romeria aquí se sirve la paella monumental a las 13:00.", see: ["CV-147"] },
-      { at: 25, plate: "Ermita de la Magdalena", name: "Ermita de la Magdalena · Castell Vell", tag: "Meta",
+      { at: 20, plate: "Camí de l'Algepsar", name: "Camí de l'Algepsar", tag: "Camí",
+        text: "Desde Sant Roc, camino hacia el pie del Tossal. Al cruzar la carretera nacional, hazlo solo por el paso señalizado.", see: [] },
+      { at: 22, plate: "Camí Vell de Barcelona", name: "Camí Vell de Barcelona", tag: "Peu del Tossal",
+        text: "El antiguo camino de Barcelona lleva hasta la subida de la ermita.", see: [] },
+      { at: 24, plate: "Ermita de la Magdalena", name: "Ermita de la Magdalena · Castell Vell", tag: "Meta",
         text: "A 111 m, sobre los restos del Castell Vell, fortaleza islámica de los siglos X y XI. En 1251 Jaime I autorizó a sus habitantes a bajar al llano y fundar Castelló; la Romeria recuerda ese traslado. La ermita actual se empezó en 1451.",
         see: ["Ermita de Santa Maria Magdalena", "Ruinas del Castell Vell"] }
     ],
-    gmaps: [4, 6, 7, 8, 9, 10, 11],
-    sides: { 5: "left", 6: "left", 7: "left", 11: "left", 12: "left" }
+    gmaps: [4, 6, 7, 8, 9, 10, 11, 12, 13],
+    sides: { 5: "left", 6: "left", 7: "left", 8: "left", 9: "left", 13: "left", 14: "left" }
   },
   tornada: {
     label: "Tornada", dir: "TORNADA", dest: "la Plaça Major",
@@ -446,7 +448,7 @@ const ROUTES = {
 };
 // Texto literal del documento oficial
 const OFFICIAL = {
-  anada: ["Plaça Vella (Major).", "Plaça de l'Herba.", "Carrer de Colom.", "Carrer Major.", "Plaça del Toll (Maria Agustina).", "Avinguda dels Caputxins.", "Camí dels Molins.", "Camí de la Travessa (Sangarró d'en Riera).", "Caminàs.", "Nacional València-Barcelona.", "Carretera del Desert de les Palmes."],
+  anada: ["Plaça Major.", "Plaça de l'Herba.", "Carrer de Colom.", "Carrer Major.", "Plaça de Maria Agustina.", "Avinguda dels Caputxins, per la part esquerra.", "Plaça del Primer Molí.", "Camí dels Molins.", "Plaça del Segon Molí.", "Camí de la Travessera.", "Camí Caminàs.", "Parada a Sant Roc de Canet.", "Camí de l'Algepsar.", "Camí Vell de Barcelona.", "Ermita de la Magdalena."],
   tornada: ["Camí de l'Algepsar.", "Camí que voreja l'Autopista.", "Camí de Boira.", "Caminàs (fins a Lledó).", "Camí de Lledó (fins als Bous).", "Camí de la Plana.", "Carrer de Sant Roc.", "Forn del Pla.", "Carrer de Sant Fèlix.", "Plaça del Descarregador (Clavé).", "Carrer d'Enmig.", "Porta del Sol.", "Carrer de les Salines (Gasset).", "Plaça de la Pau.", "Carrer Major.", "Carrer Arxiprest Balaguer.", "Plaça Vella (Major)."]
 };
 
@@ -640,7 +642,7 @@ function setRoute(key, fromHash) {
     <span class="stop-km">km ${fmt(s.km)}</span></button></li>`).join("");
   list.querySelectorAll(".stop button").forEach(b => b.addEventListener("click", () => select(+b.parentElement.dataset.i, false)));
   try { if (!fromHash) history.replaceState(null, "", "#" + key); } catch (e) {}
-  select(key === "anada" ? 9 : 5, false);
+  select(key === "anada" ? 11 : 5, false);
 }
 
 function drawArrows() {
@@ -685,7 +687,7 @@ tabs.forEach((t, k) => {
 // Itinerario oficial y pareja de placas de muestra
 for (const key in OFFICIAL) document.getElementById("off-" + key).innerHTML = OFFICIAL[key].map(x => `<li>${x}</li>`).join("");
 document.getElementById("pair").innerHTML =
-  `<div class="plaque-box">${plaqueHTML(ROUTES.anada, ROUTES.anada.stops[9])}</div><div class="plaque-box">${plaqueHTML(ROUTES.tornada, ROUTES.tornada.stops[5])}</div>`;
+  `<div class="plaque-box">${plaqueHTML(ROUTES.anada, ROUTES.anada.stops[11])}</div><div class="plaque-box">${plaqueHTML(ROUTES.tornada, ROUTES.tornada.stops[5])}</div>`;
 document.getElementById("mini-shell").innerHTML = `<g transform="translate(12 10) scale(.4)">${shellSVG("#F6E3B0", 50, 84, 60, 7)}</g>`;
 
 // ---------- Posición del usuario ----------

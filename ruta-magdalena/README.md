@@ -18,19 +18,21 @@ Dentro de la app, el botón **Mostrar mi posición** sitúa al caminante en el m
 
 | Fita | Punto de paso |
 |---|---|
-| 01 | Plaça Vella (Major) · Ajuntament |
+| 01 | Plaça Major · Ajuntament |
 | 02 | Plaça de l'Herba |
 | 03 | Carrer de Colom |
 | 04 | Carrer Major |
-| 05 | Plaça del Toll (Maria Agustina) |
-| 06 | Avinguda dels Caputxins |
-| 07 | Camí dels Molins · Primer Molí |
-| 08 | Camí de la Travessa (Sangarró d'en Riera) |
-| 09 | Caminàs |
-| 10 | Ermita de Sant Roc de Canet |
-| 11 | Nacional València-Barcelona (N-340) |
-| 12 | Carretera del Desert de les Palmes |
-| 13 | Ermita de la Magdalena · Castell Vell |
+| 05 | Plaça de Maria Agustina (el Toll) |
+| 06 | Avinguda dels Caputxins, per la part esquerra |
+| 07 | Plaça del Primer Molí |
+| 08 | Camí dels Molins |
+| 09 | Plaça del Segon Molí |
+| 10 | Camí de la Travessera |
+| 11 | Camí Caminàs |
+| 12 | Parada a l'Ermita de Sant Roc de Canet |
+| 13 | Camí de l'Algepsar |
+| 14 | Camí Vell de Barcelona |
+| 15 | Ermita de la Magdalena · Castell Vell |
 
 ### Tornada (Ermita de la Magdalena → Plaça Major) · placas verdes
 
